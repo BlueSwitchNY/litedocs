@@ -9,11 +9,11 @@ const Heroicons: NextPage<HeroiconsProps> = ({}) => {
 
 export default Heroicons
 
-export const spinner = (isLoggingIn: boolean) => {
+export const spinner = (doSpin: boolean) => {
   return (
     <svg
       className={`${
-        isLoggingIn ? "animate-spin" : "hidden"
+        doSpin ? "animate-spin" : "hidden"
       } -ml-1 mr-3 h-5 w-5 text-white`}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"

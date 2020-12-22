@@ -15,6 +15,8 @@ import Section from "../Layout/Section"
 
 import { Tag } from "../../models/interfaces"
 
+import { spinner } from "../SVG/Heroicons"
+
 interface Props {
   handle?: string
 }
@@ -37,12 +39,7 @@ const NewDocForm: NextPage<Props> = ({ handle }) => {
   }, [])
 
   function handleChangeTags(input) {
-    setTags(
-      input
-        .trim()
-        .replace(/ /g, "")
-        .toLowerCase()
-    )
+    setTags(input.trim().replace(/ /g, "").toLowerCase())
 
     const tagArray = input.split(",")
     const currentTag =
@@ -61,14 +58,14 @@ const NewDocForm: NextPage<Props> = ({ handle }) => {
     setTagResults(null)
   }
 
-  const handleChangeDetails = debounce(value => {
+  const handleChangeDetails = debounce((value) => {
     const text = value()
     // console.log(text)
     localStorage.setItem("details", text)
     setDetails(text)
   }, 250)
 
-  const handleChangeCode = debounce(value => {
+  const handleChangeCode = debounce((value) => {
     const text = value()
     // console.log(text)
     localStorage.setItem("code", text)
@@ -120,13 +117,13 @@ const NewDocForm: NextPage<Props> = ({ handle }) => {
     const res = await fetch(apiUrl, {
       method: fetchMethod,
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(entryData)
+      body: JSON.stringify(entryData),
     })
     if (res) {
       console.log(res)
-      res.json().then(res => {
+      res.json().then((res) => {
         console.log(res)
         const { entryResponse } = res
         if (entryResponse) router.push(`/entry/${entryResponse.id}`)
@@ -140,11 +137,11 @@ const NewDocForm: NextPage<Props> = ({ handle }) => {
       boxSizing: "border-box",
       fontSize: "14px",
       fontFamily: '"Dank Mono", "Fira Code", monospace',
-      ...theme.plain
-    }
+      ...theme.plain,
+    },
   }
 
-  const highlight = code => (
+  const highlight = (code) => (
     <Highlight {...defaultProps} theme={theme} code={code} language="jsx">
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <React.Fragment>
@@ -160,7 +157,7 @@ const NewDocForm: NextPage<Props> = ({ handle }) => {
     </Highlight>
   )
 
-  const onCodeChange = code => {
+  const onCodeChange = (code) => {
     setCode(code)
   }
 
@@ -216,32 +213,36 @@ const NewDocForm: NextPage<Props> = ({ handle }) => {
               <div className="md:ml-4 col-span-3 sm:col-span-2">
                 <label
                   htmlFor="company_website"
-                  className="block text-sm font-medium leading-5 text-gray-700"
+                  className="block text-xs font-medium leading-5 text-gray-700 
+                  uppercase tracking-wider font-bold"
                 >
                   Title
                 </label>
-                <div className="mt-1 flex rounded-md shadow-sm">
+                <div className="mt-2">
                   <input
-                    className="form-input flex-1 block w-full rounded-md
-                          transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                    type="text"
+                    className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full sm:text-sm border-gray-300 rounded-md"
                     placeholder="User Authentication Flow"
                     value={title}
-                    onChange={e => setTitle(e.target.value)}
+                    onChange={(e) => setTitle(e.target.value)}
                   />
                 </div>
               </div>
             </div>
             <div className="md:ml-4 mt-6">
-              <label className="block text-sm leading-5 font-medium text-gray-700">
+              <label
+                className="block text-xs leading-5 font-medium text-gray-700
+              uppercase tracking-wider font-bold"
+              >
                 Tags
               </label>
-              <div className="mt-1 rounded-md shadow-sm">
+              <div className="mt-2">
                 <input
-                  className="form-input flex-1 block w-full rounded-md
-                          transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                  type="text"
+                  className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full sm:text-sm border-gray-300 rounded-md"
                   placeholder="javascript,react,authentication,login,security"
                   value={tags}
-                  onChange={e => handleChangeTags(e.target.value)}
+                  onChange={(e) => handleChangeTags(e.target.value)}
                 />
               </div>
               <div
@@ -284,7 +285,10 @@ const NewDocForm: NextPage<Props> = ({ handle }) => {
               </p>
             </div>
             <div className="md:ml-4 mt-6">
-              <label className="block text-sm leading-5 font-medium text-gray-700 mb-1">
+              <label
+                className="block text-xs leading-5 font-medium text-gray-700 mb-1
+              uppercase tracking-wider font-bold"
+              >
                 Body
               </label>
               <hr></hr>
@@ -314,15 +318,20 @@ const NewDocForm: NextPage<Props> = ({ handle }) => {
               </p>
             </div>
             <div className="md:ml-4 mt-6">
-              <label className="block text-sm leading-5 font-medium text-gray-700">
+              <label
+                className="block text-xs leading-5 font-medium text-gray-700
+              uppercase tracking-wider font-bold"
+              >
                 Code
               </label>
-              <div className="rounded-md shadow-sm">
+              <div className="mt-2 rounded-md shadow-sm">
                 <textarea
                   rows={10}
-                  className="form-textarea mt-1 block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                  // className="form-textarea mt-1 border shadow-sm block w-full focus:outline-none
+                  // rounded-lg transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                  className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full sm:text-sm border-gray-300 rounded-md"
                   value={code}
-                  onChange={e => setCode(e.target.value)}
+                  onChange={(e) => setCode(e.target.value)}
                 />
                 {/* <Editor
                   id="code"
@@ -357,20 +366,20 @@ const NewDocForm: NextPage<Props> = ({ handle }) => {
                   text-sm leading-5 font-medium rounded-md text-white 
                   bg-blue-600 hover:bg-blue-500 focus:outline-none 
                   focus:border-blue-700 focus:shadow-outline-blue 
-                  active:bg-blue-700 transition duration-150 ease-in-out
-                  ${isSubmittingForm ? "spinner" : ""}`}
-                onClick={e =>
+                  active:bg-blue-700 transition duration-150 ease-in-out`}
+                onClick={(e) =>
                   sendEntryData(e, {
                     entry: {
                       title,
                       tagsText: tags,
                       body: details,
                       code,
-                      handle
-                    }
+                      handle,
+                    },
                   })
                 }
               >
+                {spinner(isSubmittingForm)}
                 Save
               </button>
             </span>
