@@ -23,8 +23,8 @@ const Login = () => {
     let res = await fetch(`/api/user/login`, {
       method: "POST",
       headers: new Headers({
-        Authorization: "Bearer " + DIDT
-      })
+        Authorization: "Bearer " + DIDT,
+      }),
     })
 
     let data = await res.json()
@@ -80,12 +80,17 @@ const Login = () => {
                   name="email"
                   type="email"
                   value={email}
-                  onChange={e => {
+                  onChange={(e) => {
                     setErrorMsg("") // remove error msg
                     setEmail(e.target.value)
                   }}
-                  className="mt-1 form-input block w-full transition duration-150 
-              ease-in-out sm:text-sm sm:leading-5"
+                  className="mt-1 focus:outline-none rounded-md shadow-sm border 
+                  block w-full py-2 pr-4 pl-0 
+                  focus:pl-4 text-sm placeholder-blueGray-600 
+                  text-blueGray-700 cursor-pointer hover:placeholder-blue-700 
+                  focus:cursor-text focus:bg-white focus:placeholder-blueGray-600 
+                  focus:ring-2 focus:ring-blue-500
+                  transition ease-in-out duration-250"
                 />
               </div>
               <div className="px-4 py-3 text-right sm:px-6">
@@ -99,7 +104,7 @@ const Login = () => {
                   active:bg-blue-700 transition duration-150 ease-in-out
                   ${isLoggingIn ? "spinner" : ""}`}
                     disabled={disableLogin}
-                    onClick={e => {
+                    onClick={(e) => {
                       e.preventDefault()
                       setIsLoggingIn(true)
                       if (!email) return setErrorMsg("Email cannot be empty.")

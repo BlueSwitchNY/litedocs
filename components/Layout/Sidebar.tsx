@@ -22,11 +22,7 @@ const SideBar: NextPage<SideBarProps> = ({ openSidebar, setOpenSidebar }) => {
   const [teamTags, setTeamTags] = React.useState([])
   let teamTagsArray = []
 
-  async function getUser() {
-    let res = await fetch(`/api/user`)
-    let data = await res.json()
-    const user = data.user
-
+  async function getUser(user) {
     let resUser = await fetch(`/api/user/magic/${user.issuer}`)
     let dataUser = await resUser.json()
     const dataUserObject: User = dataUser.user
@@ -40,12 +36,12 @@ const SideBar: NextPage<SideBarProps> = ({ openSidebar, setOpenSidebar }) => {
       const handle = membership.Team.handle
       let teamAndTags = {
         team: handle,
-        tags: []
+        tags: [],
       }
 
       fetch(`/api/team/${handle}/tags`)
-        .then(res => res.json())
-        .then(res => {
+        .then((res) => res.json())
+        .then((res) => {
           teamAndTags.tags = res.tags
           teamTagsArray.push(teamAndTags)
           setTeamTags(teamTagsArray)
@@ -55,13 +51,19 @@ const SideBar: NextPage<SideBarProps> = ({ openSidebar, setOpenSidebar }) => {
   }
 
   React.useEffect(() => {
-    getUser()
+    fetch(`/api/user`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.user) {
+          getUser(data.user)
+        }
+      })
   }, [])
   return (
     <React.Fragment>
       <div className="md:hidden">
         <div
-          onClick={e => setOpenSidebar(false)}
+          onClick={(e) => setOpenSidebar(false)}
           className={`fixed inset-0 z-30 bg-gray-600 
           transition-opacity ease-linear duration-300
           ${
