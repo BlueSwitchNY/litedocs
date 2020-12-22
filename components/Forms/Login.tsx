@@ -5,6 +5,8 @@ import Link from "next/link"
 
 import Section from "../Layout/Section"
 
+import { spinner } from "../SVG/Heroicons"
+
 const Login = () => {
   const [loggedIn, setLoggedIn] = useContext(LoggedInContext)
   const [isLoading, setIsLoading] = useContext(LoadingContext)
@@ -101,8 +103,7 @@ const Login = () => {
                   text-sm leading-5 font-medium rounded-md text-white 
                   bg-blue-600 hover:bg-blue-500 focus:outline-none 
                   focus:border-blue-700 focus:shadow-outline-blue 
-                  active:bg-blue-700 transition duration-150 ease-in-out
-                  ${isLoggingIn ? "spinner" : ""}`}
+                  active:bg-blue-700 transition duration-150 ease-in-out`}
                     disabled={disableLogin}
                     onClick={(e) => {
                       e.preventDefault()
@@ -111,6 +112,7 @@ const Login = () => {
                       handleLogin()
                     }}
                   >
+                    {spinner(isLoggingIn)}
                     Log in
                   </button>
                 </span>

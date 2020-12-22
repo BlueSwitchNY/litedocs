@@ -2,13 +2,13 @@ import { NextApiRequest, NextApiResponse } from "next"
 import { PrismaClient, User } from "@prisma/client"
 import auth from "../../../../middleware/auth"
 
-export default async function(req: NextApiRequest, res: NextApiResponse) {
+export default async function (req: NextApiRequest, res: NextApiResponse) {
   const userAuth = await auth(req, res)
   const user = userAuth as User
 
   const prisma = new PrismaClient({ log: ["query"] })
   const {
-    query: { id }
+    query: { id },
   } = req
 
   const entryId = id as unknown
@@ -19,22 +19,22 @@ export default async function(req: NextApiRequest, res: NextApiResponse) {
     const { title, tagsText, body, code } = entry
     console.log(req.body)
 
-    const existingEntry = await prisma.entry.findOne({
+    const existingEntry = await prisma.entry.findUnique({
       where: {
-        id: parseInt(entryIdString)
+        id: parseInt(entryIdString),
       },
       include: {
         Author: true,
         Team: {
           include: {
-            Members: true
-          }
-        }
-      }
+            Members: true,
+          },
+        },
+      },
     })
 
     const isMember = existingEntry.Team
-      ? existingEntry.Team.Members.some(m => m.userId === user.id)
+      ? existingEntry.Team.Members.some((m) => m.userId === user.id)
       : false
 
     if (existingEntry.Author.issuer !== user.issuer && !isMember) {
@@ -56,8 +56,8 @@ export default async function(req: NextApiRequest, res: NextApiResponse) {
           tagsText,
           body,
           code,
-          dateUpdated: new Date()
-        }
+          dateUpdated: new Date(),
+        },
       })
 
       //log history record
@@ -69,10 +69,10 @@ export default async function(req: NextApiRequest, res: NextApiResponse) {
           code,
           Entry: {
             connect: {
-              id: entryResponse.id
-            }
-          }
-        }
+              id: entryResponse.id,
+            },
+          },
+        },
       })
 
       const log = await prisma.log.create({
@@ -80,25 +80,25 @@ export default async function(req: NextApiRequest, res: NextApiResponse) {
           note: "Updated document",
           User: {
             connect: {
-              id: user.id
-            }
+              id: user.id,
+            },
           },
           EntryHistory: {
             connect: {
-              id: entryHistory.id
-            }
+              id: entryHistory.id,
+            },
           },
           Entry: {
             connect: {
-              id: entryResponse.id
-            }
+              id: entryResponse.id,
+            },
           },
           Team: {
             connect: {
-              id: entryResponse.teamId
-            }
-          }
-        }
+              id: entryResponse.teamId,
+            },
+          },
+        },
       })
 
       res.status(201)
@@ -114,13 +114,13 @@ export default async function(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function handleUpdateTags(prisma, entryId, tagsText) {
-  const entry = await prisma.entry.findOne({
+  const entry = await prisma.entry.findUnique({
     where: {
-      id: parseInt(entryId)
+      id: parseInt(entryId),
     },
     include: {
-      Tags: true
-    }
+      Tags: true,
+    },
   })
   const currentTagsText = entry.tagsText
   const currentTagArray = currentTagsText.split(",")
@@ -129,15 +129,15 @@ async function handleUpdateTags(prisma, entryId, tagsText) {
   let deletedTags = []
 
   //delete tags that are not in the updated array
-  entry.Tags.forEach(tag => {
+  entry.Tags.forEach((tag) => {
     if (!updatedTagArray.includes(tag.name)) {
       prisma.tag
         .delete({
           where: {
-            id: tag.id
-          }
+            id: tag.id,
+          },
         })
-        .then(res => {
+        .then((res) => {
           deletedTags.push(res)
         })
     }
@@ -146,20 +146,20 @@ async function handleUpdateTags(prisma, entryId, tagsText) {
   let newTags = []
 
   //add tags that are not in the current array
-  updatedTagArray.forEach(tag => {
+  updatedTagArray.forEach((tag) => {
     if (!currentTagArray.includes(tag) && tag.length > 0) {
       prisma.tag
         .create({
           data: {
             Entry: {
               connect: {
-                id: entry.id
-              }
+                id: entry.id,
+              },
             },
-            name: tag
-          }
+            name: tag,
+          },
         })
-        .then(res => {
+        .then((res) => {
           newTags.push(res)
         })
     }

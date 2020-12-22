@@ -4,13 +4,13 @@ import auth from "../../../middleware/auth"
 import { includes } from "lodash"
 import { query } from "express"
 
-export default async function(req: NextApiRequest, res: NextApiResponse) {
+export default async function (req: NextApiRequest, res: NextApiResponse) {
   const userAuth = await auth(req, res)
   const user = userAuth as User
 
   const prisma = new PrismaClient({ log: ["query"] })
   const {
-    query: { handle, tag }
+    query: { handle, tag },
   } = req
   console.log(req.query)
   const teamHandle = handle as unknown
@@ -24,23 +24,23 @@ export default async function(req: NextApiRequest, res: NextApiResponse) {
       entryFilters = {
         where: {
           tagsText: {
-            contains: tagNameString
-          }
-        }
+            contains: tagNameString,
+          },
+        },
       }
     }
 
-    const team = await prisma.team.findOne({
+    const team = await prisma.team.findUnique({
       where: {
-        handle: teamHandleString
+        handle: teamHandleString,
       },
       include: {
         Entries: entryFilters,
-        Members: true
-      }
+        Members: true,
+      },
     })
 
-    const isMember = team.Members.some(m => m.userId === user.id)
+    const isMember = team.Members.some((m) => m.userId === user.id)
     if (!isMember) {
       res.status(401)
       res.json({ authorized: false })

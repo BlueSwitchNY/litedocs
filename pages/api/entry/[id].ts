@@ -3,43 +3,43 @@ import { PrismaClient, User } from "@prisma/client"
 import auth from "../../../middleware/auth"
 import { includes } from "lodash"
 
-export default async function(req: NextApiRequest, res: NextApiResponse) {
+export default async function (req: NextApiRequest, res: NextApiResponse) {
   const userAuth = await auth(req, res)
   const user = userAuth as User
 
   const prisma = new PrismaClient({ log: ["query"] })
   const {
-    query: { id }
+    query: { id },
   } = req
 
   const entryId = id as unknown
   const entryIdInt = entryId as string
   try {
-    const entry = await prisma.entry.findOne({
+    const entry = await prisma.entry.findUnique({
       where: {
-        id: parseInt(entryIdInt)
+        id: parseInt(entryIdInt),
       },
       include: {
         Author: true,
         Team: {
           include: {
-            Members: true
-          }
+            Members: true,
+          },
         },
         History: true,
         Logs: {
           include: {
-            User: true
+            User: true,
           },
           orderBy: {
-            createdAt: "desc"
-          }
-        }
-      }
+            createdAt: "desc",
+          },
+        },
+      },
     })
 
     const isMember = entry.Team
-      ? entry.Team.Members.some(m => m.userId === user.id)
+      ? entry.Team.Members.some((m) => m.userId === user.id)
       : false
     console.log(entry.Author, user)
     if (entry.Author.issuer !== user.issuer && !isMember) {

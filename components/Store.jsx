@@ -16,11 +16,12 @@ const Store = ({ children }) => {
   useEffect(() => {
     ;(async () => {
       setIsLoading(true)
-
+      console.log(process.env.nodeEnv)
       /* We initialize Magic in `useEffect` so it has access to the global `window` object inside the browser */
-      const magicKey = process.env.MAGIC_PUBLIC_KEY
-        ? process.env.MAGIC_PUBLIC_KEY
-        : "pk_live_BA415260994A4F66"
+      const magicKey =
+        process.env.nodeEnv === "development"
+          ? "pk_test_506B02A19574ADC7"
+          : "pk_live_BA415260994A4F66"
       let m = new Magic(magicKey)
       await setMagic(m)
 

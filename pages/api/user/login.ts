@@ -6,12 +6,12 @@ import { serialize } from "cookie"
 import Cors from "cors"
 
 const cors = Cors({
-  methods: ["GET", "HEAD"]
+  methods: ["GET", "HEAD"],
 })
 
 function runMiddleware(req, res, fn) {
   return new Promise((resolve, reject) => {
-    fn(req, res, result => {
+    fn(req, res, (result) => {
       if (result instanceof Error) {
         return reject(result)
       }
@@ -21,7 +21,7 @@ function runMiddleware(req, res, fn) {
   })
 }
 
-export default async function(req: NextApiRequest, res: NextApiResponse) {
+export default async function (req: NextApiRequest, res: NextApiResponse) {
   await runMiddleware(req, res, cors)
 
   const prisma = new PrismaClient({ log: ["query"] })
@@ -35,15 +35,17 @@ export default async function(req: NextApiRequest, res: NextApiResponse) {
 
     /* decode token to get claim obj with data */
     let claim = magic.token.decode(DIDT)[1]
+    console.log("claim:", claim)
 
     /* get user data from Magic */
     const userMetadata = await magic.users.getMetadataByIssuer(claim.iss)
+    console.log("userMetadata", userMetadata)
 
     /* check if user is already in */
-    const existingUser = await prisma.user.findOne({
+    const existingUser = await prisma.user.findUnique({
       where: {
-        issuer: claim.iss
-      }
+        issuer: claim.iss,
+      },
     })
 
     /* Create new user if doesn't exist */
@@ -53,8 +55,8 @@ export default async function(req: NextApiRequest, res: NextApiResponse) {
         data: {
           name: "",
           email,
-          issuer
-        }
+          issuer,
+        },
       })
     }
 
