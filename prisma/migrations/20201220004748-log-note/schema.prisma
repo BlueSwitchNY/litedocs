@@ -1,0 +1,92 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url = "***"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  name        String
+  email       String
+  issuer      String   @unique
+  imageUrl    String   @default("")
+  Entries     Entry[]
+  Memberships Member[]
+  Log         Log[]
+}
+
+model Entry {
+  id          Int            @id @default(autoincrement())
+  createdAt   DateTime       @default(now())
+  userId      Int?
+  teamId      Int?
+  title       String
+  tagsText    String
+  body        String
+  code        String
+  Tags        Tag[]
+  Author      User?          @relation(fields: [userId], references: [id])
+  Team        Team?          @relation(fields: [teamId], references: [id])
+  dateUpdated DateTime       @default(now())
+  History     EntryHistory[]
+  Logs        Log[]
+}
+
+model Tag {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  entryId   Int?
+  name      String
+  Entry     Entry?   @relation(fields: [entryId], references: [id])
+}
+
+model EntryHistory {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  entryId   Int?
+  title     String
+  tagsText  String
+  body      String
+  code      String
+  Entry     Entry?   @relation(fields: [entryId], references: [id])
+  Log       Log[]
+}
+
+model Log {
+  id           Int           @id @default(autoincrement())
+  createdAt    DateTime      @default(now())
+  userId       Int?
+  historyId    Int?
+  entryId      Int?
+  note         String        @default("")
+  User         User?         @relation(fields: [userId], references: [id])
+  EntryHistory EntryHistory? @relation(fields: [historyId], references: [id])
+  Entry        Entry?        @relation(fields: [entryId], references: [id])
+}
+
+model Team {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  name      String
+  handle    String   @unique
+  imageUrl  String
+  Members   Member[]
+  Entries   Entry[]
+}
+
+model Member {
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  teamId     Int?
+  userId     Int?
+  memberType Int
+  Team       Team?    @relation(fields: [teamId], references: [id])
+  User       User?    @relation(fields: [userId], references: [id])
+}

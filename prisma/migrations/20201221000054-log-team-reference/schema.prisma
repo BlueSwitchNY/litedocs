@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = "***"
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  name        String
+  email       String
+  issuer      String   @unique
+  imageUrl    String   @default("")
+  Entries     Entry[]
+  Log         Log[]
+  Memberships Member[]
+}
+
+model Entry {
+  id          Int            @id @default(autoincrement())
+  createdAt   DateTime       @default(now())
+  userId      Int?
+  title       String
+  tagsText    String
+  body        String
+  code        String
+  dateUpdated DateTime       @default(now())
+  teamId      Int?
+  Team        Team?          @relation(fields: [teamId], references: [id])
+  Author      User?          @relation(fields: [userId], references: [id])
+  History     EntryHistory[]
+  Logs        Log[]
+  Tags        Tag[]
+}
+
+model Tag {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  entryId   Int?
+  name      String
+  Entry     Entry?   @relation(fields: [entryId], references: [id])
+}
+
+model EntryHistory {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  entryId   Int?
+  title     String
+  tagsText  String
+  body      String
+  code      String
+  Entry     Entry?   @relation(fields: [entryId], references: [id])
+  Log       Log[]
+}
+
+model Log {
+  id           Int           @id @default(autoincrement())
+  createdAt    DateTime      @default(now())
+  userId       Int?
+  teamId       Int?
+  historyId    Int?
+  entryId      Int?
+  note         String        @default("")
+  Entry        Entry?        @relation(fields: [entryId], references: [id])
+  EntryHistory EntryHistory? @relation(fields: [historyId], references: [id])
+  User         User?         @relation(fields: [userId], references: [id])
+  Team         Team?         @relation(fields: [teamId], references: [id])
+}
+
+model Team {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  name      String
+  handle    String   @unique
+  imageUrl  String
+  Entries   Entry[]
+  Members   Member[]
+  Logs       Log[]
+}
+
+model Member {
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  teamId     Int?
+  userId     Int?
+  memberType Int
+  Team       Team?    @relation(fields: [teamId], references: [id])
+  User       User?    @relation(fields: [userId], references: [id])
+}

@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url = "***"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  name        String
+  email       String
+  issuer      String   @unique
+  Entries     Entry[]
+  Memberships Member[]
+}
+
+model Entry {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  userId      Int?
+  teamId      Int?
+  title       String
+  tagsText    String
+  body        String
+  code        String
+  Tags        Tag[]
+  Author      User?    @relation(fields: [userId], references: [id])
+  Team        Team?    @relation(fields: [teamId], references: [id])
+  dateUpdated DateTime @default(now())
+}
+
+model Tag {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  entryId   Int?
+  name      String
+  Entry     Entry?   @relation(fields: [entryId], references: [id])
+}
+
+model Team {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  name      String
+  handle    String   @unique
+  imageUrl  String
+  Members   Member[]
+  Entries   Entry[]
+}
+
+model Member {
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  teamId     Int?
+  userId     Int?
+  memberType Int
+  Team       Team?    @relation(fields: [teamId], references: [id])
+  User       User?    @relation(fields: [userId], references: [id])
+}

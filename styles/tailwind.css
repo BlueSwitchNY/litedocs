@@ -1,0 +1,330 @@
+@tailwind base;
+
+/* MAIN CSS */
+
+.prism-code {
+  @apply rounded-lg;
+}
+
+ul ol ul {
+  list-style-type: square;
+}
+
+ol ul {
+  list-style-type: circle;
+}
+
+ol {
+  list-style-type: decimal;
+}
+
+ul {
+  list-style-type: disc;
+}
+
+li {
+  display: list-item;
+  text-align: -webkit-match-parent;
+}
+
+.placeholder {
+  @apply text-sm;
+}
+
+.link-underline {
+  @apply -mb-2 border-b-2;
+}
+
+body {
+  @apply text-lg;
+  /* font-family: -apple-system, Helvetica; */
+}
+
+h1 {
+  @apply inline-block pb-2 mt-6 mb-4 text-3xl font-semibold leading-tight;
+}
+
+h2 {
+  @apply pb-2 mb-4 text-2xl leading-tight font-semibold;
+}
+
+h3 {
+  @apply pb-2 mb-4 leading-tight font-semibold;
+}
+
+li > a,
+p > a {
+  @apply no-select text-black;
+}
+
+li > a:hover,
+p > a:hover {
+  @apply text-black;
+}
+
+.max-h-32 {
+  max-height: 9rem;
+}
+
+.max-h-64 {
+  max-height: 16rem;
+}
+
+.h-100 {
+  height: 26rem;
+}
+
+.max-h-100 {
+  max-height: 26rem;
+}
+
+.h-14 {
+  height: 3.2rem;
+}
+
+.h-15 {
+  height: 3.25rem;
+}
+
+.button-icon {
+  display: flex;
+  justify-content: center;
+}
+
+/* MARKDOWN STYLES */
+
+.markdown {
+  @apply text-gray-800 leading-normal break-words;
+}
+
+.mode-dark .markdown {
+  @apply text-gray-100;
+}
+
+.markdown > * + * {
+  @apply mt-0 mb-4;
+}
+
+.markdown li + li {
+  @apply mt-1;
+}
+
+.markdown li > p + p {
+  @apply mt-6;
+}
+
+.markdown strong {
+  @apply font-semibold;
+}
+
+.markdown a {
+  @apply link-underline;
+  transition: border-color 0.25s ease;
+}
+
+.markdown p {
+  @apply mb-4;
+}
+
+.markdown a:hover {
+  @apply text-black border-blue-100;
+  transition: border-color 0.25s ease;
+}
+
+.mode-dark .markdown a {
+  @apply text-gray-100;
+}
+
+.mode-dark .markdown a:hover {
+  @apply text-white;
+}
+
+.markdown strong a {
+  @apply font-bold;
+}
+
+.markdown h1 {
+  @apply leading-tight text-3xl font-semibold mb-6 mt-6 pb-2 inline-block;
+}
+
+.markdown h2 {
+  @apply leading-tight text-2xl  mb-4 mt-10 pb-2;
+}
+
+.mode-dark .markdown h1,
+.mode-dark .markdown h2 {
+  @apply border-gray-700;
+}
+
+.markdown h3 {
+  @apply leading-snug text-lg font-semibold mb-4 mt-6;
+}
+
+.markdown h4 {
+  @apply leading-none text-base font-semibold mb-4 mt-6;
+}
+
+.markdown h5 {
+  @apply leading-tight text-sm font-semibold mb-4 mt-6;
+}
+
+.markdown h6 {
+  @apply leading-tight text-sm font-semibold text-gray-600 mb-4 mt-6;
+}
+
+.markdown blockquote {
+  @apply my-8 py-0 px-4 border-l-2 border-blue-600 text-gray-500;
+}
+
+.mode-dark blockquote {
+  @apply border-l-2 bg-gray-800 border-blue-400 bg-gray-800 text-blue-100;
+}
+
+.markdown blockquote p  {
+  @apply mb-0;
+}
+
+.markdown ul,
+.markdown ol {
+  @apply list-disc bg-white text-blue-900 my-6 py-4 pl-12 pr-6 rounded-lg shadow;
+}
+
+.mode-dark .markdown ul,
+.mode-dark .markdown ol {
+  @apply bg-gray-800 text-blue-100;
+}
+
+/* OTHER */
+
+.loader {
+  border-top-color: #3498db;
+  -webkit-animation: spinner 1.5s linear infinite;
+  animation: spinner 1.5s linear infinite;
+}
+
+@-webkit-keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  position: relative;
+  color: transparent !important;
+  pointer-events: none;
+}
+
+.spinner::after {
+  content: "";
+  position: absolute !important;
+  top: calc(50% - (1em / 2));
+  left: calc(50% - (1em / 2));
+  display: block;
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentColor;
+  border-radius: 9999px;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  animation: spinAround 500ms infinite linear;
+}
+
+@keyframes spinAround {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* No button selection on click */
+.no-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* QUILL EDITOR CSS */
+
+/* .ql-snow {
+  @apply max-w-xl mx-auto px-4 py-4 bg-white shadow-md rounded-t-lg border-0;
+} */
+
+.ql-toolbar {
+  @apply mx-auto px-4 py-4 bg-white rounded-t-lg border-0;
+}
+
+.ql-container {
+  @apply mx-auto px-4 py-4 bg-white border-0;
+}
+
+.ql-tags {
+  @apply mx-auto px-4 py-3 bg-white rounded-b-lg;
+  border: 1px solid #ccc;
+  color: rgba(74, 85, 104, var(--text-opacity));
+}
+
+.ql-mention-list-container {
+  width: 270px;
+  border: 1px solid #f0f0f0;
+  border-radius: 4px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 12px 0 rgba(30, 30, 30, 0.08);
+  z-index: 9001;
+}
+
+.ql-mention-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.ql-mention-list-item {
+  cursor: pointer;
+  height: 34px;
+  line-height: 34px;
+  font-size: 14px;
+  padding: 0 20px;
+  vertical-align: middle;
+}
+
+.ql-mention-list-item.selected {
+  background-color: #d3e1eb;
+  text-decoration: none;
+}
+
+.mention {
+  height: 24px;
+  width: 65px;
+  border-radius: 6px;
+  background-color: #f8ffc2;
+  color: rgb(62, 137, 184);
+  padding: 3px 0;
+  margin-right: 2px;
+}
+
+.mention > span {
+  margin: 0 3px;
+}
+
+@tailwind components;
+
+@tailwind utilities;
