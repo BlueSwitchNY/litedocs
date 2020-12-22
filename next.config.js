@@ -11,6 +11,9 @@ module.exports = {
     MAGIC_SECRET_KEY_LIVE: process.env.MAGIC_SECRET_KEY_LIVE,
     DATABASE_URL: process.env.DATABASE_URL,
   },
+  env: {
+    nodeEnv: process.env.NODE_ENV,
+  },
   // webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
   //   config.plugins.push(new dotenv({ silent: true }))
 

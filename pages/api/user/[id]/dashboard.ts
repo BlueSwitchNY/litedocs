@@ -2,14 +2,14 @@ import { NextApiRequest, NextApiResponse } from "next"
 import { PrismaClient, User, Team } from "@prisma/client"
 import auth from "../../../../middleware/auth"
 
-export default async function(req: NextApiRequest, res: NextApiResponse) {
+export default async function (req: NextApiRequest, res: NextApiResponse) {
   const userAuth = await auth(req, res)
   const user = userAuth as User
 
   const { method } = req
   const prisma = new PrismaClient({ log: ["query"] })
   const {
-    query: { id }
+    query: { id },
   } = req
 
   const userId = id as unknown
@@ -17,79 +17,79 @@ export default async function(req: NextApiRequest, res: NextApiResponse) {
 
   if (method === "GET" && userIdString === user.issuer) {
     try {
-      const currentUser = await prisma.user.findOne({
+      const currentUser = await prisma.user.findUnique({
         where: {
-          id: user.id
+          id: user.id,
         },
         include: {
           Memberships: {
             include: {
-              Team: true
-            }
-          }
-        }
+              Team: true,
+            },
+          },
+        },
       })
 
       const logs = await prisma.log.findMany({
         where: {
-          userId: user.id
+          userId: user.id,
         },
         include: {
           User: true,
           Entry: {
             include: {
-              Team: true
-            }
-          }
+              Team: true,
+            },
+          },
         },
         orderBy: {
-          createdAt: "desc"
-        }
+          createdAt: "desc",
+        },
       })
 
       let teamLogs = []
-      currentUser.Memberships.forEach(membership => {
+      currentUser.Memberships.forEach((membership) => {
         prisma.log
           .findMany({
             where: {
-              teamId: membership.Team.id
+              teamId: membership.Team.id,
             },
             include: {
               User: true,
               Entry: {
                 include: {
-                  Team: true
-                }
-              }
+                  Team: true,
+                },
+              },
             },
             orderBy: {
-              createdAt: "desc"
-            }
+              createdAt: "desc",
+            },
           })
-          .then(logs => {
+          .then((logs) => {
             teamLogs.push({
               team: membership.Team,
-              logs
+              logs,
             })
           })
-          .catch(err => console.log(err))
+          .catch((err) => console.log(err))
       })
 
       const logsTest = await prisma.log.findMany({
         where: {
-          teamId: 3
+          teamId: 3,
         },
         include: {
           User: true,
           Entry: {
             include: {
-              Team: true
-            }
-          }
+              Team: true,
+            },
+          },
         },
         orderBy: {
-          createdAt: "desc"
-        }
+          createdAt: "desc",
+        },
       })
 
       res.status(200)

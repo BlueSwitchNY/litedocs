@@ -2,10 +2,10 @@ import { NextApiRequest, NextApiResponse } from "next"
 import { PrismaClient } from "@prisma/client"
 import { decryptCookie } from "../utilities/cookie"
 
-export default async function(req: NextApiRequest, res: NextApiResponse) {
+export default async function (req: NextApiRequest, res: NextApiResponse) {
   const prisma = new PrismaClient({ log: ["query"] })
   const {
-    query: { id }
+    query: { id },
   } = req
 
   let userFromCookie
@@ -23,13 +23,13 @@ export default async function(req: NextApiRequest, res: NextApiResponse) {
     userFromCookie = await decryptCookie(req.cookies.auth)
 
     /* check if user is already in */
-    const existingUser = await prisma.user.findOne({
+    const existingUser = await prisma.user.findUnique({
       where: {
-        issuer: userFromCookie.issuer
+        issuer: userFromCookie.issuer,
       },
       include: {
-        Memberships: true
-      }
+        Memberships: true,
+      },
     })
 
     if (!existingUser) {

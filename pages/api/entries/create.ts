@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next"
 import { PrismaClient, User } from "@prisma/client"
 import auth from "../../../middleware/auth"
 
-export default async function(req: NextApiRequest, res: NextApiResponse) {
+export default async function (req: NextApiRequest, res: NextApiResponse) {
   const userAuth = await auth(req, res)
   const user = userAuth as User
 
@@ -21,24 +21,24 @@ export default async function(req: NextApiRequest, res: NextApiResponse) {
         dateUpdated: new Date(),
         Author: {
           connect: {
-            issuer: user.issuer
-          }
+            issuer: user.issuer,
+          },
         },
-        Team: undefined
-      }
+        Team: undefined,
+      },
     }
     if (handle) {
       //check if user is a member of the team
-      const team = await prisma.team.findOne({
+      const team = await prisma.team.findUnique({
         where: {
-          handle
+          handle,
         },
         include: {
-          Members: true
-        }
+          Members: true,
+        },
       })
 
-      const isMember = team.Members.some(m => m.userId === user.id)
+      const isMember = team.Members.some((m) => m.userId === user.id)
       if (!isMember) {
         res.status(401)
         res.json({ authorized: false })
@@ -54,15 +54,15 @@ export default async function(req: NextApiRequest, res: NextApiResponse) {
             dateUpdated: new Date(),
             Author: {
               connect: {
-                issuer: user.issuer
-              }
+                issuer: user.issuer,
+              },
             },
             Team: {
               connect: {
-                handle: handle
-              }
-            }
-          }
+                handle: handle,
+              },
+            },
+          },
         }
       }
     }
@@ -80,10 +80,10 @@ export default async function(req: NextApiRequest, res: NextApiResponse) {
         code,
         Entry: {
           connect: {
-            id: newEntry.id
-          }
-        }
-      }
+            id: newEntry.id,
+          },
+        },
+      },
     })
 
     const log = await prisma.log.create({
@@ -91,25 +91,25 @@ export default async function(req: NextApiRequest, res: NextApiResponse) {
         note: "Created document",
         User: {
           connect: {
-            id: user.id
-          }
+            id: user.id,
+          },
         },
         EntryHistory: {
           connect: {
-            id: entryHistory.id
-          }
+            id: entryHistory.id,
+          },
         },
         Entry: {
           connect: {
-            id: newEntry.id
-          }
+            id: newEntry.id,
+          },
         },
         Team: {
           connect: {
-            id: newEntry.teamId
-          }
-        }
-      }
+            id: newEntry.teamId,
+          },
+        },
+      },
     })
 
     res.status(201)
@@ -126,20 +126,20 @@ async function handleAddTags(prisma, newEntry, tagsText) {
   const tagArray = tagsText.split(",")
   let newTags = []
 
-  tagArray.forEach(tag => {
+  tagArray.forEach((tag) => {
     if (tag.length > 0)
       prisma.tag
         .create({
           data: {
             Entry: {
               connect: {
-                id: newEntry.id
-              }
+                id: newEntry.id,
+              },
             },
-            name: tag
-          }
+            name: tag,
+          },
         })
-        .then(res => {
+        .then((res) => {
           newTags.push(res)
         })
   })

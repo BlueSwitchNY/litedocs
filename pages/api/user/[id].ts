@@ -3,29 +3,29 @@ import { PrismaClient, User } from "@prisma/client"
 import auth from "../../../middleware/auth"
 import { includes } from "lodash"
 
-export default async function(req: NextApiRequest, res: NextApiResponse) {
+export default async function (req: NextApiRequest, res: NextApiResponse) {
   const userAuth = await auth(req, res)
   //const user = userAuth as User
 
   const prisma = new PrismaClient({ log: ["query"] })
   const {
-    query: { id }
+    query: { id },
   } = req
 
   const userId = id as unknown
   const userIdString = userId as string
   try {
-    const user = await prisma.user.findOne({
+    const user = await prisma.user.findUnique({
       where: {
-        id: parseInt(userIdString)
+        id: parseInt(userIdString),
       },
       include: {
         Memberships: {
           include: {
-            Team: true
-          }
-        }
-      }
+            Team: true,
+          },
+        },
+      },
     })
 
     res.status(200)
