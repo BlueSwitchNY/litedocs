@@ -86,31 +86,54 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       },
     })
 
-    const log = await prisma.log.create({
-      data: {
-        note: "Created document",
-        User: {
-          connect: {
-            id: user.id,
+    if (newEntry.teamId) {
+      await prisma.log.create({
+        data: {
+          note: "Created document",
+          User: {
+            connect: {
+              id: user.id,
+            },
+          },
+          EntryHistory: {
+            connect: {
+              id: entryHistory.id,
+            },
+          },
+          Entry: {
+            connect: {
+              id: newEntry.id,
+            },
+          },
+          Team: {
+            connect: {
+              id: newEntry.teamId,
+            },
           },
         },
-        EntryHistory: {
-          connect: {
-            id: entryHistory.id,
+      })
+    } else {
+      await prisma.log.create({
+        data: {
+          note: "Created document",
+          User: {
+            connect: {
+              id: user.id,
+            },
+          },
+          EntryHistory: {
+            connect: {
+              id: entryHistory.id,
+            },
+          },
+          Entry: {
+            connect: {
+              id: newEntry.id,
+            },
           },
         },
-        Entry: {
-          connect: {
-            id: newEntry.id,
-          },
-        },
-        Team: {
-          connect: {
-            id: newEntry.teamId,
-          },
-        },
-      },
-    })
+      })
+    }
 
     res.status(201)
     res.json({ entryResponse: newEntry, newTags })
