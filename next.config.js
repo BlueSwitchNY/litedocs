@@ -1,3 +1,4 @@
+require("dotenv").config()
 const dotenv = require("dotenv-webpack")
 
 module.exports = {
@@ -5,5 +6,5 @@ module.exports = {
     config.plugins.push(new dotenv({ silent: true }))
 
     return config
-  }
+  },
 }
