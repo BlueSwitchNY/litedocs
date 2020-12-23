@@ -23,6 +23,8 @@ const TeamDocs: NextPage<Props> = ({ team, handle, tag }) => {
 
   const user = magic.user.getMetadata()
   const [currentTeam, setCurrentTeam] = React.useState(null)
+  const [isLoadingEntries, setIsLoadingEntries] = React.useState(true)
+
   async function fetchTeamRequest() {
     let res = await fetch(`/api/team/${handle}?tag=${tag}`, {
       method: "GET",
@@ -33,6 +35,8 @@ const TeamDocs: NextPage<Props> = ({ team, handle, tag }) => {
     if (authorized) {
       setCurrentTeam(team)
     } else Router.push("/")
+
+    setIsLoadingEntries(false)
   }
 
   React.useEffect(() => {
@@ -96,11 +100,9 @@ const TeamDocs: NextPage<Props> = ({ team, handle, tag }) => {
     },
   }
 
-  const tableData = currentTeam ? currentTeam.Entries : []
   const tableColumns = [
     {
       name: "Title",
-      sortable: true,
       cell: (row: Entry) => (
         <Link href="/entry/[entryid]" as={`/entry/${row.id}`}>
           <a className="hover:text-blue-600">{row.title}</a>
@@ -109,7 +111,6 @@ const TeamDocs: NextPage<Props> = ({ team, handle, tag }) => {
     },
     {
       name: "Tags",
-      sortable: false,
       cell: (row: Entry) => (
         <div className="text-sm w-48 whitespace-nowrap flex flex-row overflow-x-auto leading-5 text-gray-900">
           {row.tagsText.split(",").map((tag) => {
@@ -128,14 +129,12 @@ const TeamDocs: NextPage<Props> = ({ team, handle, tag }) => {
     },
     {
       name: "Date Added",
-      sortable: true,
       cell: (row: Entry) => (
         <div>{dayjs(row.createdAt).format("MM/DD/YYYY")}</div>
       ),
     },
     {
       name: "Date Updated",
-      sortable: true,
       cell: (row: Entry) => (
         <div>{dayjs(row.dateUpdated).format("MM/DD/YYYY")}</div>
       ),
@@ -157,9 +156,9 @@ const TeamDocs: NextPage<Props> = ({ team, handle, tag }) => {
       <div>
         <img width="100" src={currentTeam ? currentTeam.imageUrl : ""}></img>
       </div>
-      {/* <div>
+      <div>
         <h2 className="mt-6 text-3xl leading-9 font-extrabold">Docs</h2>
-      </div> */}
+      </div>
       <Link
         href={{
           pathname: "/[handle]/new",
@@ -195,15 +194,16 @@ const TeamDocs: NextPage<Props> = ({ team, handle, tag }) => {
       <div className="mt-6 shadow overflow-hidden border-b border-gray-200 sm:rounded-lg bg-white">
         <div className="">
           <DataTable
-            title="Docs"
+            noHeader={true}
             columns={tableColumns}
-            data={tableData}
+            data={currentTeam ? currentTeam.Entries : []}
             customStyles={tableStyles}
             paginationPerPage={20}
             paginationRowsPerPageOptions={[20, 50, 100]}
             pagination
             responsive={true}
             overflowY={true}
+            progressPending={isLoadingEntries}
           />
         </div>
       </div>

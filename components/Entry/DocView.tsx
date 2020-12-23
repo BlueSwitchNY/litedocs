@@ -97,19 +97,16 @@ const DocView: NextPage<Props> = ({ entry }) => {
   const activityColumns = [
     {
       name: "Date/Time",
-      sortable: true,
       cell: (row: Log) => (
         <div>{dayjs(row.createdAt).format("MM/DD/YYYY h:mm A")}</div>
       ),
     },
     {
       name: "Author",
-      sortable: true,
       cell: (row: Log) => <div>{row.User.name}</div>,
     },
     {
       name: "Action",
-      sortable: false,
       cell: (row: Log) => <div>{row.note}</div>,
     },
   ]

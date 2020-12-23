@@ -6,6 +6,7 @@ import { MagicContext, LoggedInContext, LoadingContext } from "../Store"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
+import { orderBy } from "lodash"
 import DataTable, { defaultThemes } from "react-data-table-component"
 
 import Section from "../Layout/Section"
@@ -19,6 +20,7 @@ const Entries: NextPage<Props> = ({}) => {
 
   const user = magic.user.getMetadata()
   const [currentEntries, setCurrentEntries] = React.useState(null)
+  const [isLoadingEntries, setIsLoadingEntries] = React.useState(true)
 
   async function fetchEntriesRequest() {
     //console.log(await user)
@@ -27,8 +29,11 @@ const Entries: NextPage<Props> = ({}) => {
     })
     const data = await res.json()
     console.log(data)
-    const { entries } = data
-    setCurrentEntries(entries)
+    const { authorized, entries } = data
+    if (authorized) {
+      setCurrentEntries(entries)
+    } else Router.push("/")
+    setIsLoadingEntries(false)
   }
 
   React.useEffect(() => {
@@ -92,11 +97,9 @@ const Entries: NextPage<Props> = ({}) => {
     },
   }
 
-  const tableData = currentEntries ? currentEntries : []
   const tableColumns = [
     {
       name: "Title",
-      sortable: true,
       cell: (row: Entry) => (
         <Link href="/entry/[entryid]" as={`/entry/${row.id}`}>
           <a className="hover:text-blue-600">{row.title}</a>
@@ -105,7 +108,6 @@ const Entries: NextPage<Props> = ({}) => {
     },
     {
       name: "Tags",
-      sortable: false,
       cell: (row: Entry) => (
         <div className="text-sm w-48 whitespace-nowrap flex flex-row overflow-x-auto leading-5 text-gray-900">
           {row.tagsText.split(",").map((tag) => {
@@ -124,14 +126,12 @@ const Entries: NextPage<Props> = ({}) => {
     },
     {
       name: "Date Added",
-      sortable: true,
       cell: (row: Entry) => (
         <div>{dayjs(row.createdAt).format("MM/DD/YYYY")}</div>
       ),
     },
     {
       name: "Date Updated",
-      sortable: true,
       cell: (row: Entry) => (
         <div>{dayjs(row.dateUpdated).format("MM/DD/YYYY")}</div>
       ),
@@ -139,9 +139,9 @@ const Entries: NextPage<Props> = ({}) => {
   ]
   return (
     <Section extend="mb-10">
-      {/* <div>
+      <div>
         <h2 className="text-3xl leading-9 font-extrabold">My Docs</h2>
-      </div> */}
+      </div>
       <Link href={`/new`}>
         <a>
           <button
@@ -171,15 +171,18 @@ const Entries: NextPage<Props> = ({}) => {
       <div className="mt-6 shadow overflow-hidden border-b border-gray-200 sm:rounded-lg bg-white">
         <div className="">
           <DataTable
-            title="My Docs"
+            noHeader={true}
+            // subHeader
+            // subHeaderComponent={subHeaderComponentMemo}
             columns={tableColumns}
-            data={tableData}
+            data={currentEntries ? currentEntries : []}
             customStyles={tableStyles}
             paginationPerPage={20}
             paginationRowsPerPageOptions={[20, 50, 100]}
             pagination
             responsive={true}
             overflowY={true}
+            progressPending={isLoadingEntries}
           />
         </div>
       </div>
