@@ -6,6 +6,7 @@ import { MagicContext, LoggedInContext, LoadingContext } from "../Store"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
+import DataTable, { defaultThemes } from "react-data-table-component"
 
 import Section from "../Layout/Section"
 
@@ -22,9 +23,11 @@ const TeamDocs: NextPage<Props> = ({ team, handle, tag }) => {
 
   const user = magic.user.getMetadata()
   const [currentTeam, setCurrentTeam] = React.useState(null)
+  const [isLoadingEntries, setIsLoadingEntries] = React.useState(true)
+
   async function fetchTeamRequest() {
     let res = await fetch(`/api/team/${handle}?tag=${tag}`, {
-      method: "GET"
+      method: "GET",
     })
     const data = await res.json()
     console.log(data)
@@ -32,11 +35,111 @@ const TeamDocs: NextPage<Props> = ({ team, handle, tag }) => {
     if (authorized) {
       setCurrentTeam(team)
     } else Router.push("/")
+
+    setIsLoadingEntries(false)
   }
 
   React.useEffect(() => {
     fetchTeamRequest()
   }, [])
+
+  const tableStyles = {
+    header: {
+      style: {
+        minHeight: "56px",
+        fontSize: "14px",
+        letterSpacing: ".05em",
+        textTransform: "uppercase",
+        color: "rgba(113,128,150,1)",
+        top: 0,
+        position: "sticky",
+        paddingLeft: "1.5rem",
+        paddingRight: "1.5rem",
+        paddingTop: "0.5rem",
+        paddingBottom: "0.5rem",
+        fontWeight: 900,
+      },
+    },
+    headRow: {
+      style: {
+        borderTopStyle: "solid",
+        borderTopWidth: "0px",
+        borderBottomWidth: "0px",
+        borderTopColor: defaultThemes.default.divider.default,
+      },
+    },
+    headCells: {
+      style: {
+        letterSpacing: ".05em",
+        textTransform: "uppercase",
+        color: "rgba(113,128,150,1)",
+        top: 0,
+        position: "sticky",
+        // paddingLeft: "1.5rem",
+        // paddingRight: "1.5rem",
+        paddingTop: "0.5rem",
+        paddingBottom: "0.5rem",
+        fontSize: "0.75rem",
+        fontWeight: 700,
+        borderBottomWidth: "0px",
+        borderColor: "rgba(237,242,247,1)",
+        backgroundColor: "rgba(247,250,252,1)",
+        // boxShadow: "0 1px 3px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.06)",
+      },
+    },
+    cells: {
+      style: {
+        borderColor: "#FFFFFF",
+        "&:not(:last-of-type)": {
+          borderTopWidth: "0px",
+          borderBottomWidth: "0px",
+          borderStyle: "dashed",
+          borderColor: "#FFFFFF",
+        },
+      },
+    },
+  }
+
+  const tableColumns = [
+    {
+      name: "Title",
+      cell: (row: Entry) => (
+        <Link href="/entry/[entryid]" as={`/entry/${row.id}`}>
+          <a className="hover:text-blue-600">{row.title}</a>
+        </Link>
+      ),
+    },
+    {
+      name: "Tags",
+      cell: (row: Entry) => (
+        <div className="text-sm w-48 whitespace-nowrap flex flex-row overflow-x-auto leading-5 text-gray-900">
+          {row.tagsText.split(",").map((tag) => {
+            return (
+              <span
+                key={tag}
+                className="px-2 inline-flex text-xs leading-5 
+      font-semibold rounded-full bg-blue-600 text-white mr-2"
+              >
+                {tag}
+              </span>
+            )
+          })}
+        </div>
+      ),
+    },
+    {
+      name: "Date Added",
+      cell: (row: Entry) => (
+        <div>{dayjs(row.createdAt).format("MM/DD/YYYY")}</div>
+      ),
+    },
+    {
+      name: "Date Updated",
+      cell: (row: Entry) => (
+        <div>{dayjs(row.dateUpdated).format("MM/DD/YYYY")}</div>
+      ),
+    },
+  ]
   return (
     <Section extend="mb-10">
       <div className="uppercase text-xxs font-semibold mb-4">
@@ -59,7 +162,7 @@ const TeamDocs: NextPage<Props> = ({ team, handle, tag }) => {
       <Link
         href={{
           pathname: "/[handle]/new",
-          query: { teamId: currentTeam ? currentTeam.Id : "" }
+          query: { teamId: currentTeam ? currentTeam.Id : "" },
         }}
         as={`/${currentTeam ? currentTeam.handle : ""}/new`}
       >
@@ -88,7 +191,26 @@ const TeamDocs: NextPage<Props> = ({ team, handle, tag }) => {
           </button>
         </a>
       </Link>
-      <div className="flex flex-col mt-8">
+      <div className="mt-6 shadow overflow-hidden border-b border-gray-200 sm:rounded-lg bg-white">
+        <div className="">
+          <DataTable
+            noHeader={true}
+            columns={tableColumns}
+            data={currentTeam ? currentTeam.Entries : []}
+            customStyles={tableStyles}
+            paginationPerPage={20}
+            paginationRowsPerPageOptions={[20, 50, 100]}
+            pagination
+            responsive={true}
+            overflowY={true}
+            progressPending={isLoadingEntries}
+          />
+        </div>
+      </div>
+      <div
+        // className="flex flex-col mt-8"
+        className="hidden"
+      >
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
             <div className="shadow overflow-hidden border-b bg-white border-gray-200 sm:rounded-lg">
@@ -133,7 +255,7 @@ const TeamDocs: NextPage<Props> = ({ team, handle, tag }) => {
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="text-sm w-48 whitespace-nowrap flex flex-row overflow-x-auto leading-5 text-gray-900">
-                                {entry.tagsText.split(",").map(tag => {
+                                {entry.tagsText.split(",").map((tag) => {
                                   return (
                                     <span
                                       key={tag}

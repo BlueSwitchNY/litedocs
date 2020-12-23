@@ -2,6 +2,15 @@
 
 /* MAIN CSS */
 
+.eHxVgR svg {
+  display: none !important;
+}
+
+.rdt_TableRow {
+  border-width: 0px !important;
+  @apply hover:bg-gray-50;
+}
+
 .prism-code {
   @apply rounded-lg;
 }
