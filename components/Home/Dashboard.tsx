@@ -52,16 +52,16 @@ const Dashboard: NextPage<Props> = ({}) => {
         paddingRight: "1.5rem",
         paddingTop: "0.5rem",
         paddingBottom: "0.5rem",
-        fontWeight: 900
-      }
+        fontWeight: 900,
+      },
     },
     headRow: {
       style: {
         borderTopStyle: "solid",
-        borderTopWidth: "1px",
-        borderBottomWidth: "2px",
-        borderTopColor: defaultThemes.default.divider.default
-      }
+        borderTopWidth: "0px",
+        borderBottomWidth: "0px",
+        borderTopColor: defaultThemes.default.divider.default,
+      },
     },
     headCells: {
       style: {
@@ -76,21 +76,23 @@ const Dashboard: NextPage<Props> = ({}) => {
         paddingBottom: "0.5rem",
         fontSize: "0.75rem",
         fontWeight: 700,
-        borderBottomWidth: "1px",
+        borderBottomWidth: "0px",
         borderColor: "rgba(237,242,247,1)",
-        backgroundColor: "rgba(247,250,252,1)"
-      }
+        backgroundColor: "rgba(247,250,252,1)",
+        // boxShadow: "0 1px 3px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.06)",
+      },
     },
     cells: {
       style: {
-        // "&:not(:last-of-type)": {
-        //   borderTopWidth: "0px",
-        //   borderBottomWidth: "1px",
-        //   borderStyle: "dashed",
-        //   borderColor: "rgba(237,242,247,1)"
-        // }
-      }
-    }
+        borderColor: "#FFFFFF",
+        "&:not(:last-of-type)": {
+          borderTopWidth: "0px",
+          borderBottomWidth: "0px",
+          borderStyle: "dashed",
+          borderColor: "#FFFFFF",
+        },
+      },
+    },
   }
 
   const activityData = myActivity
@@ -100,7 +102,7 @@ const Dashboard: NextPage<Props> = ({}) => {
       sortable: true,
       cell: (row: Log) => (
         <div>{dayjs(row.createdAt).format("MM/DD/YYYY h:mm A")}</div>
-      )
+      ),
     },
     {
       name: "Documentation",
@@ -109,18 +111,20 @@ const Dashboard: NextPage<Props> = ({}) => {
         <Link href="/entry/[entryid]" as={`/entry/${row.Entry.id}`}>
           <a className="text-blue-600">{row.Entry.title}</a>
         </Link>
-      )
+      ),
     },
     {
       name: "Action",
       sortable: false,
-      cell: (row: Log) => <div>{row.note}</div>
+      cell: (row: Log) => <div>{row.note}</div>,
     },
     {
       name: "Team",
       sortable: false,
-      cell: (row: Log) => <div>{row.Entry.Team ? row.Entry.Team.name : ""}</div>
-    }
+      cell: (row: Log) => (
+        <div>{row.Entry.Team ? row.Entry.Team.name : ""}</div>
+      ),
+    },
   ]
 
   const teamActivityColumns = [
@@ -129,7 +133,7 @@ const Dashboard: NextPage<Props> = ({}) => {
       sortable: true,
       cell: (row: Log) => (
         <div>{dayjs(row.createdAt).format("MM/DD/YYYY h:mm A")}</div>
-      )
+      ),
     },
     {
       name: "Documentation",
@@ -138,18 +142,18 @@ const Dashboard: NextPage<Props> = ({}) => {
         <Link href="/entry/[entryid]" as={`/entry/${row.Entry.id}`}>
           <a className="text-blue-600">{row.Entry.title}</a>
         </Link>
-      )
+      ),
     },
     {
       name: "Action",
       sortable: false,
-      cell: (row: Log) => <div>{row.note}</div>
+      cell: (row: Log) => <div>{row.note}</div>,
     },
     {
       name: "Author",
       sortable: false,
-      cell: (row: Log) => <div>{row.User.name}</div>
-    }
+      cell: (row: Log) => <div>{row.User.name}</div>,
+    },
   ]
   return (
     <Section extend="mb-10">
@@ -160,12 +164,16 @@ const Dashboard: NextPage<Props> = ({}) => {
             columns={activityColumns}
             data={activityData}
             customStyles={activityStyles}
+            paginationPerPage={5}
+            paginationRowsPerPageOptions={[5, 10, 20]}
             pagination
             dense
+            responsive={true}
+            overflowY={true}
           />
         </div>
       </div>
-      {teamActivity.map(teamLogObject => {
+      {teamActivity.map((teamLogObject) => {
         const team: Team = teamLogObject.team
         const logs: Array<Log> = teamLogObject.logs
         return (
@@ -179,8 +187,12 @@ const Dashboard: NextPage<Props> = ({}) => {
                 columns={teamActivityColumns}
                 data={logs}
                 customStyles={activityStyles}
+                paginationPerPage={5}
+                paginationRowsPerPageOptions={[5, 10, 20]}
                 pagination
                 dense
+                responsive={true}
+                overflowY={true}
               />
             </div>
           </div>

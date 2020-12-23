@@ -26,7 +26,7 @@ const DocView: NextPage<Props> = ({ entry }) => {
   const now = dayjs()
 
   const lastUpdatedLog: Log = entry.Logs[entry.Logs.length - 1]
-  const logUsers: Array<User> = entry.Logs.map(log => log.User)
+  const logUsers: Array<User> = entry.Logs.map((log) => log.User)
   let userIdSet = new Set()
   let authors: Array<User> = []
   logUsers.forEach((user: User) => {
@@ -50,16 +50,16 @@ const DocView: NextPage<Props> = ({ entry }) => {
         paddingRight: "1.5rem",
         paddingTop: "0.5rem",
         paddingBottom: "0.5rem",
-        fontWeight: 900
-      }
+        fontWeight: 900,
+      },
     },
     headRow: {
       style: {
         borderTopStyle: "solid",
-        borderTopWidth: "1px",
-        borderBottomWidth: "2px",
-        borderTopColor: defaultThemes.default.divider.default
-      }
+        borderTopWidth: "0px",
+        borderBottomWidth: "0px",
+        borderTopColor: defaultThemes.default.divider.default,
+      },
     },
     headCells: {
       style: {
@@ -74,21 +74,23 @@ const DocView: NextPage<Props> = ({ entry }) => {
         paddingBottom: "0.5rem",
         fontSize: "0.75rem",
         fontWeight: 700,
-        borderBottomWidth: "1px",
+        borderBottomWidth: "0px",
         borderColor: "rgba(237,242,247,1)",
-        backgroundColor: "rgba(247,250,252,1)"
-      }
+        backgroundColor: "rgba(247,250,252,1)",
+        // boxShadow: "0 1px 3px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.06)",
+      },
     },
     cells: {
       style: {
-        // "&:not(:last-of-type)": {
-        //   borderTopWidth: "0px",
-        //   borderBottomWidth: "1px",
-        //   borderStyle: "dashed",
-        //   borderColor: "rgba(237,242,247,1)"
-        // }
-      }
-    }
+        borderColor: "#FFFFFF",
+        "&:not(:last-of-type)": {
+          borderTopWidth: "0px",
+          borderBottomWidth: "0px",
+          borderStyle: "dashed",
+          borderColor: "#FFFFFF",
+        },
+      },
+    },
   }
 
   const activityData = entry.Logs
@@ -98,18 +100,18 @@ const DocView: NextPage<Props> = ({ entry }) => {
       sortable: true,
       cell: (row: Log) => (
         <div>{dayjs(row.createdAt).format("MM/DD/YYYY h:mm A")}</div>
-      )
+      ),
     },
     {
       name: "Author",
       sortable: true,
-      cell: (row: Log) => <div>{row.User.name}</div>
+      cell: (row: Log) => <div>{row.User.name}</div>,
     },
     {
       name: "Action",
       sortable: false,
-      cell: (row: Log) => <div>{row.note}</div>
-    }
+      cell: (row: Log) => <div>{row.note}</div>,
+    },
   ]
   return (
     <Section extend="mb-10">
@@ -159,7 +161,7 @@ const DocView: NextPage<Props> = ({ entry }) => {
       </div>
 
       <div className="text-sm leading-5 text-gray-900 mb-6">
-        {entry.tagsText.split(",").map(tag => {
+        {entry.tagsText.split(",").map((tag) => {
           return (
             <span
               key={tag}

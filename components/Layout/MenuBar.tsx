@@ -16,7 +16,7 @@ const MenuBar: NextPage<Props> = ({}) => {
 
   const [isDropDownOpen, setIsDropDownOpen] = useState(false)
 
-  const handleClickOutside = e => {
+  const handleClickOutside = (e) => {
     if (node.current.contains(e.target)) {
       // inside click
       return
@@ -43,7 +43,7 @@ const MenuBar: NextPage<Props> = ({}) => {
    */
   const handleLogout = async () => {
     fetch(`/api/user/logout`, {
-      method: "GET"
+      method: "GET",
     })
     setLoggedIn(false)
     await magic.user.logout()
@@ -112,7 +112,7 @@ const MenuBar: NextPage<Props> = ({}) => {
         </div>
       </div>
 
-      <div className="flex items-center mr-64">
+      <div className="flex items-center md:mr-64">
         <a
           href="#"
           className="text-white p-2 rounded-full 
