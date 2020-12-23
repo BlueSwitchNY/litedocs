@@ -26,7 +26,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
           Tags: true,
         },
         orderBy: {
-          createdAt: "asc",
+          title: "asc",
         },
       })
 
