@@ -103,6 +103,7 @@ const TeamDocs: NextPage<Props> = ({ team, handle, tag }) => {
   const tableColumns = [
     {
       name: "Title",
+      width: "250px",
       cell: (row: Entry) => (
         <Link href="/entry/[entryid]" as={`/entry/${row.id}`}>
           <a className="hover:text-blue-600">{row.title}</a>
@@ -111,16 +112,17 @@ const TeamDocs: NextPage<Props> = ({ team, handle, tag }) => {
     },
     {
       name: "Tags",
+      width: "300px",
       cell: (row: Entry) => (
-        <div className="text-sm w-48 whitespace-nowrap flex flex-row overflow-x-auto leading-5 text-gray-900">
-          {row.tagsText.split(",").map((tag) => {
+        <div className="text-sm leading-5 text-gray-900">
+          {row.Tags.map((tag) => {
             return (
               <span
-                key={tag}
-                className="px-2 inline-flex text-xs leading-5 
+                key={tag.id}
+                className="mb-1 px-2 inline-flex text-xs leading-5 
       font-semibold rounded-full bg-blue-600 text-white mr-2"
               >
-                {tag}
+                {tag.name}
               </span>
             )
           })}
