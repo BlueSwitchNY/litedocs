@@ -25,7 +25,7 @@ interface Props {
 const DocView: NextPage<Props> = ({ entry }) => {
   const now = dayjs()
 
-  const lastUpdatedLog: Log = entry.Logs[entry.Logs.length - 1]
+  const lastUpdatedLog: Log = entry.Logs[0]
   const logUsers: Array<User> = entry.Logs.map((log) => log.User)
   let userIdSet = new Set()
   let authors: Array<User> = []
