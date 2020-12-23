@@ -2,14 +2,14 @@ import { NextApiRequest, NextApiResponse } from "next"
 import { PrismaClient, User } from "@prisma/client"
 import auth from "../../../../middleware/auth"
 
-export default async function(req: NextApiRequest, res: NextApiResponse) {
+export default async function (req: NextApiRequest, res: NextApiResponse) {
   const userAuth = await auth(req, res)
   const user = userAuth as User
 
   const { method } = req
   const prisma = new PrismaClient({ log: ["query"] })
   const {
-    query: { id }
+    query: { id },
   } = req
 
   const userId = id as unknown
@@ -20,11 +20,14 @@ export default async function(req: NextApiRequest, res: NextApiResponse) {
       const entries = await prisma.entry.findMany({
         where: {
           userId: user.id,
-          teamId: null
+          teamId: null,
+        },
+        include: {
+          Tags: true,
         },
         orderBy: {
-          createdAt: "asc"
-        }
+          createdAt: "asc",
+        },
       })
 
       res.status(200)

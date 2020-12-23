@@ -19,9 +19,16 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   const tagName = tag as unknown
   const tagNameString = tagName as string
   try {
-    let entryFilters: any = true
+    let entryFilters: any = {
+      include: {
+        Tags: true,
+      },
+    }
     if (tag != "null") {
       entryFilters = {
+        include: {
+          Tags: true,
+        },
         where: {
           tagsText: {
             contains: tagNameString,
