@@ -10,7 +10,7 @@ import DataTable, { defaultThemes } from "react-data-table-component"
 
 import Section from "../Layout/Section"
 
-import { Team, Entry } from "../../models/interfaces"
+import { Team, Entry, Tag } from "../../models/interfaces"
 
 interface Props {
   team?: Team
@@ -115,7 +115,7 @@ const TeamDocs: NextPage<Props> = ({ team, handle, tag }) => {
       width: "300px",
       cell: (row: Entry) => (
         <div className="text-sm leading-5 text-gray-900">
-          {row.Tags.map((tag) => {
+          {row.Tags.map((tag: Tag) => {
             return (
               <span
                 key={tag.id}

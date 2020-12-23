@@ -23,6 +23,9 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       include: {
         Tags: true,
       },
+      orderBy: {
+        title: "asc",
+      },
     }
     if (tag != "null") {
       entryFilters = {
@@ -33,6 +36,9 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
           tagsText: {
             contains: tagNameString,
           },
+        },
+        orderBy: {
+          title: "asc",
         },
       }
     }
