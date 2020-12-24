@@ -12,10 +12,9 @@ class MyApp extends App {
       <>
         <Head>
           <link
-            rel="icon"
-            type="image/x-icon"
-            sizes="16x16 32x32"
-            href="favicon.ico"
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="/apple-touch-icon.png"
           />
           <link
             rel="icon"
@@ -30,10 +29,9 @@ class MyApp extends App {
             href="/favicon-16x16.png"
           />
           <link rel="manifest" href="/site.webmanifest" />
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-          ></meta>
+          <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+          <meta name="msapplication-TileColor" content="#da532c" />
+          <meta name="theme-color" content="#ffffff" />
           {/* General tags */}
           <meta key="description" property="description" content="LiteDocs" />
           <title key="title">LiteDocs</title>
@@ -43,7 +41,7 @@ class MyApp extends App {
           <meta
             key="og:description"
             property="og:description"
-            content="LiteDocs"
+            content="minimalist documentation"
           />
           {/* <meta key="og:image" property="og:image" content="" /> */}
           <meta key="og:type" property="og:type" content="website" />
@@ -56,7 +54,7 @@ class MyApp extends App {
           <meta
             key="twitter:description"
             property="twitter:description"
-            content="LiteDocs"
+            content="minimalist documentation"
           />
           {/* <meta key="twitter:image" property="twitter:image" content="" /> */}
           <meta key="twitter:card" property="twitter:card" content="summary" />
