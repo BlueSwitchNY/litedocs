@@ -178,6 +178,7 @@ const DocView: NextPage<Props> = ({ entry }) => {
           ${author.imageUrl ? "" : "hidden"}`}
               src={author.imageUrl}
               alt=""
+              title={author.name}
             ></img>
             <div
               className={`inline-block font-bold w-10 h-10 bg-blue-600 
