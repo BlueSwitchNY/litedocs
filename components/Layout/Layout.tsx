@@ -3,7 +3,7 @@ import Head from "next/head"
 import React, { useState, useEffect, useContext } from "react"
 
 import Store from "../Store"
-import Menubar from "./Menubar"
+import Menubar from "./MenuBar"
 import Sidebar from "./Sidebar"
 import Footer from "./Footer"
 
