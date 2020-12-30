@@ -117,7 +117,7 @@ const DocView: NextPage<Props> = ({ entry }) => {
       tabIndex={-1}
     >
       <div className="py-8 xl:py-10">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 xl:max-w-5xl xl:grid xl:grid-cols-3">
+        <div className="max-w-3xl px-4 sm:px-6 lg:px-8 xl:max-w-5xl xl:grid xl:grid-cols-3">
           <div className="xl:col-span-2 xl:pr-8 xl:border-r xl:border-gray-200">
             <div>
               <div>
