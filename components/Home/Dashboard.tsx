@@ -157,7 +157,51 @@ const Dashboard: NextPage<Props> = ({}) => {
   ]
   return (
     <Section extend="mb-10">
-      <div className="mt-6 shadow overflow-hidden border-b border-gray-200 sm:rounded-lg bg-white">
+      {/* <div className="flex flex-wrap -m-2">
+        <h2 className="uppercase tracking-wider text-sm font-semibold">
+          My Activity
+        </h2>
+        <div className="h-12 m-2 w-full rounded-md sm:rounded-lg flex">
+          <div>
+            <ul className="divide-y divide-gray-200">
+              {myActivity
+                ? myActivity.map((log: Log) => (
+                    <li className="py-4">
+                      <div className="flex space-x-3">
+                        <img
+                          className="h-6 w-6 rounded-full"
+                          src={log.User.imageUrl}
+                          alt={log.User.name}
+                        ></img>
+                        <div className="flex-1 space-y-1">
+                          <div className="flex items-center justify-between">
+                            <h3 className="text-sm font-medium">
+                              {log.User.name}
+                            </h3>
+                            <p className="text-sm text-gray-500">
+                              {dayjs(log.createdAt).format("MM/DD/YYYY")}
+                            </p>
+                          </div>
+                          <p className="text-sm text-gray-500">
+                            {log.note}{" "}
+                            <Link
+                              href="/entry/[entryid]"
+                              as={`/entry/${log.Entry.id}`}
+                            >
+                              <a>{log.Entry.title}</a>
+                            </Link>
+                          </p>
+                        </div>
+                      </div>
+                    </li>
+                  ))
+                : null}
+            </ul>
+          </div>
+        </div>
+      </div> */}
+
+      <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
         <div className="">
           <DataTable
             title="My Activity"

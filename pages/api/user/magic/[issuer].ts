@@ -22,7 +22,15 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       include: {
         Memberships: {
           include: {
-            Team: true,
+            Team: {
+              include: {
+                Entries: {
+                  orderBy: {
+                    title: "asc",
+                  },
+                },
+              },
+            },
           },
         },
       },

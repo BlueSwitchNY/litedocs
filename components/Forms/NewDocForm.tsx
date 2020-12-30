@@ -106,29 +106,31 @@ const NewDocForm: NextPage<Props> = ({ handle }) => {
 
   async function sendEntryData(e, entryData) {
     e.preventDefault()
-    setIsSubmittingForm(true)
+    if (!isSubmittingForm) {
+      setIsSubmittingForm(true)
 
-    let apiUrl = "/api/entries/create"
-    let fetchMethod = "POST"
-    if (currentEntry && currentEntry.id) {
-      apiUrl = `/api/entry/${currentEntry.id}/update`
-      fetchMethod = "PUT"
-    }
-    const res = await fetch(apiUrl, {
-      method: fetchMethod,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(entryData),
-    })
-    if (res) {
-      console.log(res)
-      res.json().then((res) => {
-        console.log(res)
-        const { entryResponse } = res
-        if (entryResponse) router.push(`/entry/${entryResponse.id}`)
-        setIsSubmittingForm(false)
+      let apiUrl = "/api/entries/create"
+      let fetchMethod = "POST"
+      if (currentEntry && currentEntry.id) {
+        apiUrl = `/api/entry/${currentEntry.id}/update`
+        fetchMethod = "PUT"
+      }
+      const res = await fetch(apiUrl, {
+        method: fetchMethod,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(entryData),
       })
+      if (res) {
+        console.log(res)
+        res.json().then((res) => {
+          console.log(res)
+          const { entryResponse } = res
+          if (entryResponse) router.push(`/entry/${entryResponse.id}`)
+          setIsSubmittingForm(false)
+        })
+      }
     }
   }
 
@@ -163,7 +165,7 @@ const NewDocForm: NextPage<Props> = ({ handle }) => {
 
   return (
     <Section extend="mb-10">
-      <div className="uppercase text-xxs font-semibold">
+      <div className="hidden uppercase text-xxs font-semibold">
         {handle ? (
           <>
             <Link href="/teams">
@@ -202,18 +204,18 @@ const NewDocForm: NextPage<Props> = ({ handle }) => {
         {currentEntry && currentEntry.id ? "Edit" : "New"}
       </div>
       <div>
-        <h2 className="mt-6 text-3xl leading-9 font-extrabold">
-          {currentEntry && currentEntry.id ? "Edit" : "New"} Doc
+        <h2 className="text-3xl leading-9 font-extrabold">
+          {currentEntry && currentEntry.id ? "Edit" : "New"}
         </h2>
       </div>
       <form action="#" method="POST">
-        <div className="shadow sm:rounded-md sm:overflow-hidden">
+        <div className="sm:rounded-md sm:overflow-hidden">
           <div className="px-4 py-5 bg-white sm:p-6">
             <div className="grid grid-cols-3 gap-6">
               <div className="md:ml-4 col-span-3 sm:col-span-2">
                 <label
                   htmlFor="company_website"
-                  className="block text-xs font-medium leading-5 text-gray-700 
+                  className="block text-xs leading-5 text-gray-700 
                   uppercase tracking-wider font-bold"
                 >
                   Title
@@ -231,7 +233,7 @@ const NewDocForm: NextPage<Props> = ({ handle }) => {
             </div>
             <div className="md:ml-4 mt-6">
               <label
-                className="block text-xs leading-5 font-medium text-gray-700
+                className="block text-xs leading-5 text-gray-700
               uppercase tracking-wider font-bold"
               >
                 Tags
@@ -286,7 +288,7 @@ const NewDocForm: NextPage<Props> = ({ handle }) => {
             </div>
             <div className="md:ml-4 mt-6">
               <label
-                className="block text-xs leading-5 font-medium text-gray-700 mb-1
+                className="block text-xs leading-5 text-gray-700 mb-1
               uppercase tracking-wider font-bold"
               >
                 Body
@@ -319,7 +321,7 @@ const NewDocForm: NextPage<Props> = ({ handle }) => {
             </div>
             <div className="md:ml-4 mt-6">
               <label
-                className="block text-xs leading-5 font-medium text-gray-700
+                className="block text-xs leading-5 text-gray-700
               uppercase tracking-wider font-bold"
               >
                 Code
@@ -358,7 +360,7 @@ const NewDocForm: NextPage<Props> = ({ handle }) => {
               </p>
             </div>
           </div>
-          <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
+          <div className="px-4 py-3 text-right sm:px-6">
             <span className="inline-flex rounded-md shadow-sm">
               <button
                 type="submit"

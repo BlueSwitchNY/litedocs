@@ -10,13 +10,14 @@ import {
   viewGridIcon,
   documentsIcon,
   userGroupIcon,
-  hashtagIcon
+  hashtagIcon,
 } from "../SVG/Heroicons"
 
-import { User, Member, Team, Tag } from "../../models/interfaces"
+import { User, Entry, Member, Team, Tag } from "../../models/interfaces"
 
 interface SideBarItemsProps {
-  teamTagsList: Array<TeamTags>
+  currentUser: User
+  teamTagsList?: Array<TeamTags>
 }
 
 interface TeamTags {
@@ -24,7 +25,7 @@ interface TeamTags {
   tags: Array<Tag>
 }
 
-const SideBarItems: NextPage<SideBarItemsProps> = ({ teamTagsList }) => {
+const SideBarItems: NextPage<SideBarItemsProps> = ({ currentUser }) => {
   const [currentPath, setCurrentPath] = useState("")
 
   useEffect(() => {
@@ -35,82 +36,75 @@ const SideBarItems: NextPage<SideBarItemsProps> = ({ teamTagsList }) => {
   }, [])
   return (
     <>
-      <ul>
-        <li>
-          <Link href="/">
-            <a
-              href="/"
-              className={`mb-1 px-2 py-2 rounded-lg flex items-center font-medium 
-            focus:outline-none focus:text-white focus:bg-gray-700 hover:text-white
-            ${
-              currentPath === "/"
-                ? "text-white bg-gray-900"
-                : "text-gray-300 hover:bg-gray-700"
-            }`}
-            >
-              {viewGridIcon(24, 24, "mr-4 opacity-50")}
-              Dashboard
-            </a>
-          </Link>
-        </li>
-
-        <li>
-          <Link href="/me">
-            <a
-              href="/me"
-              className={`mb-1 px-2 py-2 rounded-lg flex items-center font-medium 
-            focus:outline-none focus:text-white focus:bg-gray-700 hover:text-white
-            ${
-              currentPath === "/me"
-                ? "text-white bg-gray-900"
-                : "text-gray-300 hover:bg-gray-700"
-            }`}
-            >
-              {documentsIcon(24, 24, "mr-4 opacity-50")}
-              Personal
-            </a>
-          </Link>
-        </li>
-
-        <li>
-          <Link href="/teams">
-            <a
-              href="/teams"
-              className={`mb-1 px-2 py-2 rounded-lg flex items-center font-medium 
-              focus:outline-none focus:text-white focus:bg-gray-700 hover:text-white
-            ${
-              currentPath === "/teams"
-                ? "text-white bg-gray-900"
-                : "text-gray-300 hover:bg-gray-700"
-            }`}
-            >
-              {userGroupIcon(24, 24, "mr-4 opacity-50")}
-              Teams
-            </a>
-          </Link>
-        </li>
-
-        {/* <li>
-        <Link href="/settings">
+      <div className="space-y-1">
+        <Link href="/">
           <a
-            href="/settings"
-            className={`mb-1 px-2 py-2 rounded-lg flex items-center font-medium 
-                  
-                  text-white 
-            focus:outline-none focus:text-white focus:bg-gray-700 hover:text-white
-            ${
-              currentPath === "/settings"
-                ? "text-white bg-gray-900"
-                : "text-gray-300 hover:bg-gray-700"
-            }`}
+            className={`flex items-center px-2 py-2 lg:text-sm text-base font-medium rounded-md
+          ${
+            currentPath === "/"
+              ? "bg-gray-900 text-white group"
+              : "text-gray-300 hover:bg-gray-700 hover:text-white group"
+          }`}
           >
-            {gearIcon(24, 24, "mr-4 opacity-50")}
-            Settings
+            {viewGridIcon(
+              24,
+              24,
+              "mr-4 text-gray-400 group-hover:text-gray-300"
+            )}
+            Dashboard
           </a>
         </Link>
-      </li> */}
-      </ul>
-      {teamTagsList.map((teamTags: TeamTags) => (
+        <Link href="/me">
+          <a
+            className={`flex items-center px-2 py-2 lg:text-sm text-base font-medium rounded-md
+          ${
+            currentPath === "/me"
+              ? "bg-gray-900 text-white group"
+              : "text-gray-300 hover:bg-gray-700 hover:text-white group"
+          }
+          `}
+          >
+            {documentsIcon(
+              24,
+              24,
+              "mr-4 text-gray-400 group-hover:text-gray-300"
+            )}
+            Personal
+          </a>
+        </Link>
+      </div>
+      <div className="mt-10">
+        {currentUser
+          ? currentUser.Memberships.map((membership: Member) => (
+              <div key={membership.id}>
+                <p className="px-2 text-xs font-semibold uppercase tracking-wider">
+                  <Link href="/[handle]" as={`/${membership.Team.handle}`}>
+                    <a className="text-gray-400 hover:text-white">
+                      {membership.Team.name}
+                    </a>
+                  </Link>
+                </p>
+                <div className="mt-2 space-y-1">
+                  {membership.Team.Entries.map((entry: Entry) => (
+                    <Link
+                      key={entry.id}
+                      href="/entry/[entryid]"
+                      as={`/entry/${entry.id}`}
+                    >
+                      <a
+                        className="flex items-center text-gray-300 hover:bg-gray-700 
+                        hover:text-white px-2 py-1 lg:text-sm text-base font-medium rounded-md"
+                      >
+                        <span className="truncate">{entry.title}</span>
+                      </a>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ))
+          : null}
+      </div>
+      {/* {teamTagsList.map((teamTags: TeamTags) => (
         <div key={teamTags.team}>
           <a href={`/${teamTags.team}`}>
             <h3
@@ -137,7 +131,7 @@ const SideBarItems: NextPage<SideBarItemsProps> = ({ teamTagsList }) => {
             ))}
           </div>
         </div>
-      ))}
+      ))} */}
     </>
   )
 }
