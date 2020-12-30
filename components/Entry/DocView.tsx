@@ -14,7 +14,8 @@ import beautify from "js-beautify"
 const beautifyJS = beautify.js
 import DataTable, { defaultThemes } from "react-data-table-component"
 
-import Section from "../Layout/Section"
+import Activity from "./Activity"
+import Details from "./Details"
 
 import { User, Entry, EntryHistory, Log } from "../../models/interfaces"
 
@@ -111,174 +112,132 @@ const DocView: NextPage<Props> = ({ entry }) => {
     },
   ]
   return (
-    <Section extend="mb-10">
-      <div className="uppercase text-xxs font-semibold mb-4">
-        {entry.teamId ? (
-          <>
-            <Link href="/[handle]" as={`/${entry.Team.handle}`}>
-              <a className=" hover:text-gray-500">{entry.Team.handle}</a>
-            </Link>{" "}
-            /{" "}
-          </>
-        ) : (
-          <>
-            <Link href="/">
-              <a className=" hover:text-gray-500">Docs</a>
-            </Link>{" "}
-            /{" "}
-          </>
-        )}
-        {entry.title}
-      </div>
-      <div className="lg:flex lg:items-center lg:justify-between mb-4">
-        <div>
-          <h2 className="mt-6 text-3xl leading-9 font-bold">{entry.title}</h2>
-        </div>
-        <Link href="/entry/[entryid]/edit" as={`/entry/${entry.id}/edit`}>
-          <a
-            type="button"
-            className="inline-flex items-center px-4 py-2 border border-gray-300 
-              text-sm leading-5 font-medium rounded-md text-gray-700 bg-white 
-              hover:text-gray-500 focus:outline-none focus:shadow-outline-blue 
-              focus:border-blue-300 active:text-gray-800 active:bg-gray-50 
-              transition duration-150 ease-in-out"
-          >
-            {/* Heroicon name: pencil */}
-            <svg
-              className="-ml-1 mr-2 h-5 w-5 text-gray-500"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-            </svg>
-            Edit
-          </a>
-        </Link>
-      </div>
-
-      <div className="text-sm leading-5 text-gray-900 mb-6">
-        {entry.tagsText.split(",").map((tag) => {
-          return (
-            <span
-              key={tag}
-              className="px-2 inline-flex text-xs leading-5 
-                                font-semibold rounded-full bg-blue-600 text-white mr-2"
-            >
-              {tag}
-            </span>
-          )
-        })}
-      </div>
-      <div className="flex -space-x-2 overflow-hidden mb-6">
-        {authors.map((author: User) => (
-          <div key={author.id}>
-            <img
-              className={`inline-block h-10 w-10 rounded-full border-2 border-white
-          ${author.imageUrl ? "" : "hidden"}`}
-              src={author.imageUrl}
-              alt=""
-              title={author.name}
-            ></img>
-            <div
-              className={`inline-block font-bold w-10 h-10 bg-blue-600 
-          text-white text-center justify-center rounded-full border-2 border-white
-          ${author.imageUrl ? "hidden" : ""}`}
-            >
-              <span className="m-1 text-2xl">
-                {author.name ? author.name.substring(0, 1) : "?"}
-              </span>
+    <main
+      className="flex-1 relative overflow-y-auto focus:outline-none"
+      tabIndex={-1}
+    >
+      <div className="py-8 xl:py-10">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 xl:max-w-5xl xl:grid xl:grid-cols-3">
+          <div className="xl:col-span-2 xl:pr-8 xl:border-r xl:border-gray-200">
+            <div>
+              <div>
+                <div className="md:flex md:items-center md:justify-between md:space-x-4 xl:border-b xl:pb-6">
+                  <div>
+                    <h1 className="mb-0 text-2xl font-bold text-gray-900">
+                      {entry.title}
+                    </h1>
+                    {/* <p className="mt-2 text-sm text-gray-500">
+                      #400 opened by{" "}
+                      <a href="#" className="font-medium text-gray-900">
+                        Hilary Mahy{" "}
+                      </a>
+                      in{" "}
+                      <a href="#" className="font-medium text-gray-900">
+                        Customer Portal
+                      </a>
+                    </p> */}
+                  </div>
+                  <div className="mt-4 flex space-x-3 md:mt-0">
+                    <Link
+                      href="/entry/[entryid]/edit"
+                      as={`/entry/${entry.id}/edit`}
+                    >
+                      <a
+                        type="button"
+                        className="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
+                      >
+                        {/* Heroicon name: pencil */}
+                        <svg
+                          className="-ml-1 mr-2 h-5 w-5 text-gray-400"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                        </svg>
+                        <span>Edit</span>
+                      </a>
+                    </Link>
+                  </div>
+                </div>
+                <aside className="mt-8 xl:hidden">
+                  <Details
+                    users={authors}
+                    tags={entry.Tags}
+                    dateUpdated={entry.dateUpdated}
+                  />
+                </aside>
+                <div className="py-3 xl:pt-6 xl:pb-0">
+                  <h2 className="sr-only">Description</h2>
+                  <div className="prose max-w-none">
+                    <hr className="xl:hidden" />
+                    <Markdown className="markdown-body">
+                      {entry.body.replace(/\\/g, "")}
+                    </Markdown>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-      <div className="text-xs">
-        <img
-          className={`inline-block h-6 w-6 rounded-full mr-1
-          ${
-            lastUpdatedLog
-              ? lastUpdatedLog.User.imageUrl
-                ? ""
-                : "hidden"
-              : null
-          }`}
-          src={lastUpdatedLog ? lastUpdatedLog.User.imageUrl : null}
-          alt={lastUpdatedLog ? lastUpdatedLog.User.name : ""}
-          title={lastUpdatedLog ? lastUpdatedLog.User.name : ""}
-        ></img>
-        <div
-          className={`inline-block font-bold w-5 h-5 bg-blue-600 
-          text-white text-center justify-center rounded-full mr-1
-          ${
-            lastUpdatedLog
-              ? lastUpdatedLog.User.imageUrl
-                ? "hidden"
-                : ""
-              : null
-          }`}
-        >
-          <span className="m-1">
-            {lastUpdatedLog
-              ? lastUpdatedLog.User.name
-                ? lastUpdatedLog.User.name.substring(0, 1)
-                : "?"
-              : null}
-          </span>
-        </div>
-        {lastUpdatedLog ? lastUpdatedLog.User.name : null} updated{" "}
-        {dayjs.utc(entry.dateUpdated).format("MM/DD/YYYY")}
-      </div>
-
-      <div className="flex flex-col mt-8">
-        <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+            <div className={`mt-6 ${entry.code.length > 0 ? "" : "hidden"}`}>
+              Code:
+              <Highlight
+                {...defaultProps}
+                theme={theme}
+                code={beautifyJS(
+                  entry.code.replace(/\\n/g, "").replace(/\\/g, "")
+                )}
+                language="jsx"
+              >
+                {({
+                  className,
+                  style,
+                  tokens,
+                  getLineProps,
+                  getTokenProps,
+                }) => (
+                  <Pre className={className} style={style}>
+                    {tokens.map((line, i) => (
+                      <Line key={i} {...getLineProps({ line, key: i })}>
+                        <LineNo>{i + 1}</LineNo>
+                        <LineContent>
+                          {line.map((token, key) => (
+                            <span
+                              key={key}
+                              {...getTokenProps({ token, key })}
+                            />
+                          ))}
+                        </LineContent>
+                      </Line>
+                    ))}
+                  </Pre>
+                )}
+              </Highlight>
+            </div>
+            <Activity />
             <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg bg-white">
-              <div className="m-8">
-                <Markdown className="markdown-body">
-                  {entry.body.replace(/\\/g, "")}
-                </Markdown>
+              <div className="">
+                <DataTable
+                  title="Activity"
+                  columns={activityColumns}
+                  data={activityData}
+                  customStyles={activityStyles}
+                  pagination
+                  dense
+                />
               </div>
             </div>
           </div>
+          <aside className="hidden xl:block xl:pl-8">
+            <Details
+              users={authors}
+              tags={entry.Tags}
+              dateUpdated={entry.dateUpdated}
+            />
+          </aside>
         </div>
       </div>
-      <div className={`mt-6 ${entry.code.length > 0 ? "" : "hidden"}`}>
-        Code:
-        <Highlight
-          {...defaultProps}
-          theme={theme}
-          code={beautifyJS(entry.code.replace(/\\n/g, "").replace(/\\/g, ""))}
-          language="jsx"
-        >
-          {({ className, style, tokens, getLineProps, getTokenProps }) => (
-            <Pre className={className} style={style}>
-              {tokens.map((line, i) => (
-                <Line key={i} {...getLineProps({ line, key: i })}>
-                  <LineNo>{i + 1}</LineNo>
-                  <LineContent>
-                    {line.map((token, key) => (
-                      <span key={key} {...getTokenProps({ token, key })} />
-                    ))}
-                  </LineContent>
-                </Line>
-              ))}
-            </Pre>
-          )}
-        </Highlight>
-      </div>
-      <div className="mt-6 shadow overflow-hidden border-b border-gray-200 sm:rounded-lg bg-white">
-        <div className="">
-          <DataTable
-            title="Activity"
-            columns={activityColumns}
-            data={activityData}
-            customStyles={activityStyles}
-            pagination
-            dense
-          />
-        </div>
-      </div>
-    </Section>
+    </main>
   )
 }
 
