@@ -2,6 +2,30 @@
 
 /* MAIN CSS */
 
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  font-size: 12px;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
 .eHxVgR svg {
   display: none !important;
 }
@@ -15,23 +39,23 @@
   @apply rounded-lg;
 }
 
-ul ol ul {
+.markdown-body ul ol ul {
   list-style-type: square;
 }
 
-ol ul {
+.markdown-body ol ul {
   list-style-type: circle;
 }
 
-ol {
+.markdown-body ol {
   list-style-type: decimal;
 }
 
-ul {
+.markdown-body ul {
   list-style-type: disc;
 }
 
-li {
+.markdown-body li {
   display: list-item;
   text-align: -webkit-match-parent;
 }

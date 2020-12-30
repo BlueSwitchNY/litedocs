@@ -144,7 +144,7 @@ const TeamDocs: NextPage<Props> = ({ team, handle, tag }) => {
   ]
   return (
     <Section extend="mb-10">
-      <div className="uppercase text-xxs font-semibold mb-4">
+      <div className="hidden uppercase text-xxs font-semibold mb-4">
         <Link href="/teams">
           <a className=" hover:text-gray-500">Teams</a>
         </Link>{" "}
@@ -159,7 +159,9 @@ const TeamDocs: NextPage<Props> = ({ team, handle, tag }) => {
         <img width="100" src={currentTeam ? currentTeam.imageUrl : ""}></img>
       </div>
       <div>
-        <h2 className="mt-6 text-3xl leading-9 font-extrabold">Docs</h2>
+        <h2 className="mt-6 text-3xl leading-9 font-extrabold">
+          {currentTeam ? currentTeam.name : "Docs"}
+        </h2>
       </div>
       <Link
         href={{

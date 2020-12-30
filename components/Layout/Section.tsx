@@ -8,7 +8,7 @@ interface Props {
 
 const Section: NextPage<Props> = ({ children, extend }) => {
   return (
-    <section className={`mt-32 ${extend}`}>
+    <section className={`mt-10 ${extend}`}>
       <Container>{children}</Container>
     </section>
   )

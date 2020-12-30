@@ -21,6 +21,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       },
       include: {
         Author: true,
+        Tags: true,
         Team: {
           include: {
             Members: true,
