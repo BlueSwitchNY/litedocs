@@ -78,26 +78,19 @@ const SideBarItems: NextPage<SideBarItemsProps> = ({ currentUser }) => {
           ? currentUser.Memberships.map((membership: Member) => (
               <div key={membership.id}>
                 <p className="px-2 text-xs font-semibold uppercase tracking-wider">
-                  <Link href="/[handle]" as={`/${membership.Team.handle}`}>
-                    <a className="text-gray-400 hover:text-white">
+                <a href={`/${membership.Team.handle}`} className="text-gray-400 hover:text-white">
                       {membership.Team.name}
                     </a>
-                  </Link>
                 </p>
                 <div className="mt-2 space-y-1">
                   {membership.Team.Entries.map((entry: Entry) => (
-                    <Link
-                      key={entry.id}
-                      href="/entry/[entryid]"
-                      as={`/entry/${entry.id}`}
+                    <a
+                    href={`/entry/${entry.id}`}
+                      className="flex items-center text-gray-300 hover:bg-gray-700 
+                      hover:text-white px-2 py-1 lg:text-sm text-base font-medium rounded-md"
                     >
-                      <a
-                        className="flex items-center text-gray-300 hover:bg-gray-700 
-                        hover:text-white px-2 py-1 lg:text-sm text-base font-medium rounded-md"
-                      >
-                        <span className="truncate">{entry.title}</span>
-                      </a>
-                    </Link>
+                      <span className="truncate">{entry.title}</span>
+                    </a>
                   ))}
                 </div>
               </div>
