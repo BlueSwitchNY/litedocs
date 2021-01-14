@@ -144,8 +144,7 @@ const SideBar: NextPage<SideBarProps> = ({ openSidebar, setOpenSidebar }) => {
                 <SidebarItems currentUser={currentUser} />
               </nav>
             </div>
-
-            <ProfileNavItem user={currentUser} />
+            <ProfileNavItem user={currentUser} handleLogout={handleLogout} />
           </div>
           <div className="flex-shrink-0 w-14" aria-hidden="true">
             {/* Dummy element to force sidebar to shrink to fit close icon */}
@@ -170,7 +169,7 @@ const SideBar: NextPage<SideBarProps> = ({ openSidebar, setOpenSidebar }) => {
                 <SidebarItems currentUser={currentUser} />
               </nav>
             </div>
-            <ProfileNavItem user={currentUser} />
+            <ProfileNavItem user={currentUser} handleLogout={handleLogout} />
           </div>
         </div>
       </div>
