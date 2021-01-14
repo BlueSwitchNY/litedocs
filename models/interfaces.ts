@@ -13,6 +13,7 @@ export interface Entry {
   userId: number
   teamId: number
   title: string
+  Category: Category
   tagsText: string
   body: string
   code: string
@@ -22,6 +23,13 @@ export interface Entry {
   Team: Team
   History: Array<EntryHistory>
   Logs: Array<Log>
+}
+
+export interface Category {
+  id: number
+  createdAt: Date
+  name: string
+  Entries: Array<Entry>
 }
 
 export interface Tag {
@@ -73,5 +81,5 @@ export interface Member {
 
 export enum MemberType {
   Owner = 1,
-  Member
+  Member,
 }

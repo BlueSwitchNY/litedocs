@@ -25,6 +25,7 @@ const NewDocForm: NextPage<Props> = ({ handle }) => {
   const router = useRouter()
   const [isNew, setIsNew] = React.useState(true)
   const [title, setTitle] = React.useState("")
+  const [category, setCategory] = React.useState("")
   const [tags, setTags] = React.useState("")
   const [details, setDetails] = React.useState("")
   const [code, setCode] = React.useState("")
@@ -96,6 +97,7 @@ const NewDocForm: NextPage<Props> = ({ handle }) => {
       if (!authorized) router.push("/")
       else {
         setTitle(entry.title)
+        setCategory(entry.Category ? entry.Category.name : "")
         setTags(entry.tagsText)
         setDetails(entry.body)
         setCode(entry.code)
@@ -214,7 +216,6 @@ const NewDocForm: NextPage<Props> = ({ handle }) => {
             <div className="grid grid-cols-3 gap-6">
               <div className="md:ml-4 col-span-3 sm:col-span-2">
                 <label
-                  htmlFor="company_website"
                   className="block text-xs leading-5 text-gray-700 
                   uppercase tracking-wider font-bold"
                 >
@@ -223,10 +224,31 @@ const NewDocForm: NextPage<Props> = ({ handle }) => {
                 <div className="mt-2">
                   <input
                     type="text"
-                    className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full sm:text-sm border-gray-300 rounded-md"
+                    className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full 
+                    sm:text-sm border-gray-300 rounded-md placeholder-gray-500 placeholder-opacity-50"
                     placeholder="User Authentication Flow"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="mt-6 grid grid-cols-3 gap-6">
+              <div className="md:ml-4 col-span-3 sm:col-span-2">
+                <label
+                  className="block text-xs leading-5 text-gray-700 
+                  uppercase tracking-wider font-bold"
+                >
+                  Category
+                </label>
+                <div className="mt-2">
+                  <input
+                    type="text"
+                    className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full 
+                    sm:text-sm border-gray-300 rounded-md placeholder-gray-500 placeholder-opacity-50"
+                    placeholder="Shopify"
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
                   />
                 </div>
               </div>
@@ -241,7 +263,8 @@ const NewDocForm: NextPage<Props> = ({ handle }) => {
               <div className="mt-2">
                 <input
                   type="text"
-                  className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full sm:text-sm border-gray-300 rounded-md"
+                  className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full 
+                  sm:text-sm border-gray-300 rounded-md placeholder-gray-500 placeholder-opacity-50"
                   placeholder="javascript,react,authentication,login,security"
                   value={tags}
                   onChange={(e) => handleChangeTags(e.target.value)}
@@ -373,6 +396,7 @@ const NewDocForm: NextPage<Props> = ({ handle }) => {
                   sendEntryData(e, {
                     entry: {
                       title,
+                      category,
                       tagsText: tags,
                       body: details,
                       code,
