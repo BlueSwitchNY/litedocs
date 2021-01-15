@@ -25,6 +25,9 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
             Team: {
               include: {
                 Entries: {
+                  include: {
+                    Category: true,
+                  },
                   orderBy: {
                     title: "asc",
                   },
