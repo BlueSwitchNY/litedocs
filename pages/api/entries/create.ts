@@ -10,11 +10,32 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 
   try {
     const { entry } = req.body
-    const { title, tagsText, body, code, handle } = entry
+    const { title, category, tagsText, body, code, handle } = entry
+
+    let categoryId = 0
+    const existingCategory = await prisma.category.findFirst({
+      where: {
+        name: category.toLowerCase(),
+      },
+    })
+    if (existingCategory) categoryId = existingCategory.id
+    else {
+      const newCategory = await prisma.category.create({
+        data: {
+          name: category.toLowerCase(),
+        },
+      })
+      categoryId = newCategory.id
+    }
 
     let entryData = {
       data: {
         title,
+        Category: {
+          connect: {
+            id: categoryId,
+          },
+        },
         tagsText,
         body,
         code,
@@ -48,6 +69,11 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
         entryData = {
           data: {
             title,
+            Category: {
+              connect: {
+                id: categoryId,
+              },
+            },
             tagsText,
             body,
             code,

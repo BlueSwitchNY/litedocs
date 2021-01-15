@@ -16,7 +16,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 
   try {
     const { entry } = req.body
-    const { title, tagsText, body, code } = entry
+    const { title, category, tagsText, body, code } = entry
     console.log(req.body)
 
     const existingEntry = await prisma.entry.findUnique({
@@ -24,6 +24,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
         id: parseInt(entryIdString),
       },
       include: {
+        Category: true,
         Author: true,
         Team: {
           include: {
@@ -49,10 +50,31 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
         tagsText
       )
 
+      let categoryId = 0
+      const existingCategory = await prisma.category.findFirst({
+        where: {
+          name: category.toLowerCase(),
+        },
+      })
+      if (existingCategory) categoryId = existingCategory.id
+      else {
+        const newCategory = await prisma.category.create({
+          data: {
+            name: category.toLowerCase(),
+          },
+        })
+        categoryId = newCategory.id
+      }
+
       const entryResponse = await prisma.entry.update({
         where: { id: parseInt(entryIdString) },
         data: {
           title,
+          Category: {
+            connect: {
+              id: categoryId,
+            },
+          },
           tagsText,
           body,
           code,

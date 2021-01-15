@@ -34,6 +34,24 @@ const SideBarItems: NextPage<SideBarItemsProps> = ({ currentUser }) => {
       setCurrentPath(pathName)
     }
   }, [])
+
+  function toTitleCase(str) {
+    return str.replace(/\w\S*/g, function (txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+    })
+  }
+
+  //generate unique categories until Prisma allows groupBy
+  let teamCategories = {}
+  if (currentUser) {
+    currentUser.Memberships.forEach((membership: Member) => {
+      let categorySet = new Set()
+      membership.Team.Entries.forEach((entry: Entry) => {
+        categorySet.add(entry.Category ? entry.Category.name : "other")
+      })
+      teamCategories[membership.Team.handle] = Array.from(categorySet).sort()
+    })
+  }
   return (
     <>
       <div className="space-y-1">
@@ -75,26 +93,48 @@ const SideBarItems: NextPage<SideBarItemsProps> = ({ currentUser }) => {
       </div>
       <div className="mt-10">
         {currentUser
-          ? currentUser.Memberships.map((membership: Member) => (
-              <div key={membership.id}>
-                <p className="px-2 text-xs font-semibold uppercase tracking-wider">
-                <a href={`/${membership.Team.handle}`} className="text-gray-400 hover:text-white">
+          ? currentUser.Memberships.map((membership: Member) => {
+              return (
+                <div key={membership.id}>
+                  <p className="px-2 text-xs font-semibold uppercase tracking-wider">
+                    <a
+                      href={`/${membership.Team.handle}`}
+                      className="text-gray-400 hover:text-white"
+                    >
                       {membership.Team.name}
                     </a>
-                </p>
-                <div className="mt-2 space-y-1">
-                  {membership.Team.Entries.map((entry: Entry) => (
-                    <a
-                    href={`/entry/${entry.id}`}
-                      className="flex items-center text-gray-300 hover:bg-gray-700 
-                      hover:text-white px-2 py-1 lg:text-sm text-base font-medium rounded-md"
-                    >
-                      <span className="truncate">{entry.title}</span>
-                    </a>
-                  ))}
+                  </p>
+                  <div className="mt-2 space-y-1">
+                    {teamCategories[membership.Team.handle].map((category) => (
+                      <div>
+                        <p
+                          className="flex items-center text-gray-300 px-2 py-1 lg:text-base text-md 
+                        font-medium rounded-md"
+                        >
+                          {toTitleCase(category)}
+                        </p>
+                        {membership.Team.Entries.map((entry: Entry) => {
+                          if (
+                            entry.Category &&
+                            entry.Category.name === category
+                          ) {
+                            return (
+                              <a
+                                href={`/entry/${entry.id}`}
+                                className="ml-4 flex items-center text-gray-300 hover:bg-gray-700 
+                          hover:text-white px-2 py-1 lg:text-sm text-base font-medium rounded-md"
+                              >
+                                <span className="truncate">{entry.title}</span>
+                              </a>
+                            )
+                          }
+                        })}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))
+              )
+            })
           : null}
       </div>
       {/* {teamTagsList.map((teamTags: TeamTags) => (

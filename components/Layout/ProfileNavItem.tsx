@@ -6,9 +6,10 @@ import { User } from "../../models/interfaces"
 
 interface Props {
   user: User
+  handleLogout: any
 }
 
-const ProfileNavItem: NextPage<Props> = ({ user }) => {
+const ProfileNavItem: NextPage<Props> = ({ user, handleLogout }) => {
   return (
     <div className="flex-shrink-0 flex bg-gray-600 p-4">
       <a href="#" className="flex-shrink-0 group block">
@@ -24,14 +25,24 @@ const ProfileNavItem: NextPage<Props> = ({ user }) => {
               alt=""
             />
           </div>
-          <div className="ml-3">
-            <p className="text-base font-medium text-gray-100 group-hover:text-gray-200">
-              {user ? (user.name ? user.name : user.email) : ""}
-            </p>
-            <p className="text-sm font-medium text-gray-300 group-hover:text-gray-400">
-              View profile
-            </p>
-          </div>
+          {user ? (
+            <div className="ml-3">
+              <p className="text-base font-medium text-gray-100 group-hover:text-gray-200">
+                {user ? (user.name ? user.name : user.email) : ""}
+              </p>
+              <p className="text-sm font-medium text-gray-300">
+                <span className="hover:text-gray-400">View profile</span>
+                &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                <a
+                  href="#"
+                  className="py-2 text-gray-300 hover:text-gray-400"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </a>
+              </p>
+            </div>
+          ) : null}
         </div>
       </a>
     </div>

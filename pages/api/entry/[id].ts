@@ -20,6 +20,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
         id: parseInt(entryIdInt),
       },
       include: {
+        Category: true,
         Author: true,
         Tags: true,
         Team: {
