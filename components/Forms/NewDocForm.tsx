@@ -166,199 +166,212 @@ const NewDocForm: NextPage<Props> = ({ handle }) => {
   }
 
   return (
-    <Section extend="mb-10">
-      <div className="hidden uppercase text-xxs font-semibold">
-        {handle ? (
-          <>
-            <Link href="/teams">
-              <a className=" hover:text-gray-500">Teams</a>
-            </Link>{" "}
-            /{" "}
-            <Link href="/[handle]" as={`/${handle}`}>
-              <a className=" hover:text-gray-500">{handle}</a>
-            </Link>
-            {" / "}
-          </>
-        ) : currentEntry && currentEntry.Team ? (
-          <>
-            <Link href="/[handle]" as={`/${currentEntry.Team.handle}`}>
-              <a className=" hover:text-gray-500">{currentEntry.Team.handle}</a>
-            </Link>
-            {" / "}
-          </>
-        ) : (
-          <>
-            <Link href="/">
-              <a className=" hover:text-gray-500">Docs</a>
-            </Link>
-            {" / "}
-          </>
-        )}
+    <main
+      className="flex-1 relative overflow-y-auto focus:outline-none"
+      tabIndex={-1}
+    >
+      <div className="py-8 xl:py-10">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 xl:max-w-full xl:grid xl:grid-cols-3">
+          <div className="xl:col-span-2 xl:pr-8 xl:border-r xl:border-gray-200">
+            <div className="hidden uppercase text-xxs font-semibold">
+              {handle ? (
+                <>
+                  <Link href="/teams">
+                    <a className=" hover:text-gray-500">Teams</a>
+                  </Link>{" "}
+                  /{" "}
+                  <Link href="/[handle]" as={`/${handle}`}>
+                    <a className=" hover:text-gray-500">{handle}</a>
+                  </Link>
+                  {" / "}
+                </>
+              ) : currentEntry && currentEntry.Team ? (
+                <>
+                  <Link href="/[handle]" as={`/${currentEntry.Team.handle}`}>
+                    <a className=" hover:text-gray-500">
+                      {currentEntry.Team.handle}
+                    </a>
+                  </Link>
+                  {" / "}
+                </>
+              ) : (
+                <>
+                  <Link href="/">
+                    <a className=" hover:text-gray-500">Docs</a>
+                  </Link>
+                  {" / "}
+                </>
+              )}
 
-        {currentEntry && currentEntry.id ? (
-          <>
-            <Link href="/entry/[entryid]" as={`/entry/${currentEntry.id}`}>
-              <a className=" hover:text-gray-500">{currentEntry.title}</a>
-            </Link>
-            {" / "}
-          </>
-        ) : null}
-        {currentEntry && currentEntry.id ? "Edit" : "New"}
-      </div>
-      <div>
-        <h2 className="text-3xl leading-9 font-extrabold">
-          {currentEntry && currentEntry.id ? "Edit" : "New"}
-        </h2>
-      </div>
-      <form action="#" method="POST">
-        <div className="sm:rounded-md sm:overflow-hidden">
-          <div className="px-4 py-5 bg-white sm:p-6">
-            <div className="grid grid-cols-3 gap-6">
-              <div className="md:ml-4 col-span-3 sm:col-span-2">
-                <label
-                  className="block text-xs leading-5 text-gray-700 
-                  uppercase tracking-wider font-bold"
-                >
-                  Title
-                </label>
-                <div className="mt-2">
-                  <input
-                    type="text"
-                    className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full 
-                    sm:text-sm border-gray-300 rounded-md placeholder-gray-500 placeholder-opacity-50"
-                    placeholder="User Authentication Flow"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                  />
-                </div>
-              </div>
+              {currentEntry && currentEntry.id ? (
+                <>
+                  <Link
+                    href="/entry/[entryid]"
+                    as={`/entry/${currentEntry.id}`}
+                  >
+                    <a className=" hover:text-gray-500">{currentEntry.title}</a>
+                  </Link>
+                  {" / "}
+                </>
+              ) : null}
+              {currentEntry && currentEntry.id ? "Edit" : "New"}
             </div>
-            <div className="mt-6 grid grid-cols-3 gap-6">
-              <div className="md:ml-4 col-span-3 sm:col-span-2">
-                <label
-                  className="block text-xs leading-5 text-gray-700 
-                  uppercase tracking-wider font-bold"
-                >
-                  Category
-                </label>
-                <div className="mt-2">
-                  <input
-                    type="text"
-                    className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full 
-                    sm:text-sm border-gray-300 rounded-md placeholder-gray-500 placeholder-opacity-50"
-                    placeholder="Shopify"
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                  />
-                </div>
-              </div>
+
+            <div>
+              <h2 className="text-3xl leading-9 font-extrabold">
+                {currentEntry && currentEntry.id ? "Edit" : "New"}
+              </h2>
             </div>
-            <div className="md:ml-4 mt-6">
-              <label
-                className="block text-xs leading-5 text-gray-700
+
+            <form action="#" method="POST">
+              <div className="sm:rounded-md sm:overflow-hidden">
+                <div className="px-4 py-5 bg-white sm:p-6">
+                  <div className="grid grid-cols-3 gap-6">
+                    <div className="md:ml-4 col-span-3 sm:col-span-2">
+                      <label
+                        className="block text-xs leading-5 text-gray-700 
+                  uppercase tracking-wider font-bold"
+                      >
+                        Title
+                      </label>
+                      <div className="mt-2">
+                        <input
+                          type="text"
+                          className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full 
+                    sm:text-sm border-gray-300 rounded-md placeholder-gray-500 placeholder-opacity-50"
+                          placeholder="User Authentication Flow"
+                          value={title}
+                          onChange={(e) => setTitle(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-6 grid grid-cols-3 gap-6">
+                    <div className="md:ml-4 col-span-3 sm:col-span-2">
+                      <label
+                        className="block text-xs leading-5 text-gray-700 
+                  uppercase tracking-wider font-bold"
+                      >
+                        Category
+                      </label>
+                      <div className="mt-2">
+                        <input
+                          type="text"
+                          className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full 
+                    sm:text-sm border-gray-300 rounded-md placeholder-gray-500 placeholder-opacity-50"
+                          placeholder="Shopify"
+                          value={category}
+                          onChange={(e) => setCategory(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="md:ml-4 mt-6">
+                    <label
+                      className="block text-xs leading-5 text-gray-700
               uppercase tracking-wider font-bold"
-              >
-                Tags
-              </label>
-              <div className="mt-2">
-                <input
-                  type="text"
-                  className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full 
+                    >
+                      Tags
+                    </label>
+                    <div className="mt-2">
+                      <input
+                        type="text"
+                        className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full 
                   sm:text-sm border-gray-300 rounded-md placeholder-gray-500 placeholder-opacity-50"
-                  placeholder="javascript,react,authentication,login,security"
-                  value={tags}
-                  onChange={(e) => handleChangeTags(e.target.value)}
-                />
-              </div>
-              <div
-                className={`absolute z-40 mt-2 w-56 rounded-md shadow-lg bg-white 
+                        placeholder="javascript,react,authentication,login,security"
+                        value={tags}
+                        onChange={(e) => handleChangeTags(e.target.value)}
+                      />
+                    </div>
+                    <div
+                      className={`absolute z-40 mt-2 w-56 rounded-md shadow-lg bg-white 
               ring-1 ring-black ring-opacity-5 ${
                 tagResults && tagResults.length > 0 && tags.length > 0
                   ? ""
                   : "hidden"
               }`}
-              >
-                <div
-                  className="py-1"
-                  role="menu"
-                  aria-orientation="vertical"
-                  aria-labelledby="options-menu"
-                >
-                  {tagResults
-                    ? tagResults.map((tag: Tag) => (
-                        <a
-                          key={tag.id}
-                          href="#"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                          role="menuitem"
-                          onClick={() => handleClickTag(tag.name)}
-                        >
-                          <span
-                            className="px-2 inline-flex text-xs leading-5 font-semibold 
+                    >
+                      <div
+                        className="py-1"
+                        role="menu"
+                        aria-orientation="vertical"
+                        aria-labelledby="options-menu"
+                      >
+                        {tagResults
+                          ? tagResults.map((tag: Tag) => (
+                              <a
+                                key={tag.id}
+                                href="#"
+                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                                role="menuitem"
+                                onClick={() => handleClickTag(tag.name)}
+                              >
+                                <span
+                                  className="px-2 inline-flex text-xs leading-5 font-semibold 
                     rounded-full bg-blue-100 text-blue-800"
-                          >
-                            {tag.name}
-                          </span>
-                        </a>
-                      ))
-                    : null}
-                </div>
-              </div>
+                                >
+                                  {tag.name}
+                                </span>
+                              </a>
+                            ))
+                          : null}
+                      </div>
+                    </div>
 
-              <p className="mt-2 text-sm text-gray-500">
-                Separate each tag by a comma.
-              </p>
-            </div>
-            <div className="md:ml-4 mt-6">
-              <label
-                className="block text-xs leading-5 text-gray-700 mb-1
+                    <p className="mt-2 text-sm text-gray-500">
+                      Separate each tag by a comma.
+                    </p>
+                  </div>
+                  <div className="md:ml-4 mt-6">
+                    <label
+                      className="block text-xs leading-5 text-gray-700 mb-1
               uppercase tracking-wider font-bold"
-              >
-                Body
-              </label>
-              <hr></hr>
-              <div className="rounded-md shadow-sm">
-                {/* <textarea
+                    >
+                      Body
+                    </label>
+                    <hr></hr>
+                    <div className="rounded-md shadow-sm">
+                      {/* <textarea
                         rows={3}
                         className="form-textarea mt-1 block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
                         value={details}
                         onChange={() => {}}
                       /> */}
-                <Editor
-                  id="details"
-                  className="text-sm mt-2"
-                  defaultValue={bodyTemplate}
-                  value={
-                    currentEntry && currentEntry.body && !isNew
-                      ? currentEntry.body
-                      : bodyTemplate
-                  }
-                  onChange={handleChangeDetails}
-                  placeholder={"This code is meant to..."}
-                />
-              </div>
-              <p className="mt-2 text-sm text-gray-500">
-                Brief (or not so brief) description of the code you are
-                documenting. Code blocks can be included as well.
-              </p>
-            </div>
-            <div className="md:ml-4 mt-6">
-              <label
-                className="block text-xs leading-5 text-gray-700
+                      <Editor
+                        id="details"
+                        className="text-sm mt-2"
+                        defaultValue={bodyTemplate}
+                        value={
+                          currentEntry && currentEntry.body && !isNew
+                            ? currentEntry.body
+                            : bodyTemplate
+                        }
+                        onChange={handleChangeDetails}
+                        placeholder={"This code is meant to..."}
+                      />
+                    </div>
+                    <p className="mt-2 text-sm text-gray-500">
+                      Brief (or not so brief) description of the code you are
+                      documenting. Code blocks can be included as well.
+                    </p>
+                  </div>
+                  <div className="md:ml-4 mt-6">
+                    <label
+                      className="block text-xs leading-5 text-gray-700
               uppercase tracking-wider font-bold"
-              >
-                Code
-              </label>
-              <div className="mt-2 rounded-md shadow-sm">
-                <textarea
-                  rows={10}
-                  // className="form-textarea mt-1 border shadow-sm block w-full focus:outline-none
-                  // rounded-lg transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-                  className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full sm:text-sm border-gray-300 rounded-md"
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                />
-                {/* <Editor
+                    >
+                      Code
+                    </label>
+                    <div className="mt-2 rounded-md shadow-sm">
+                      <textarea
+                        rows={10}
+                        // className="form-textarea mt-1 border shadow-sm block w-full focus:outline-none
+                        // rounded-lg transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                        className="shadow-sm focus:ring-blue-600 focus:border-blue-600 block w-full sm:text-sm border-gray-300 rounded-md"
+                        value={code}
+                        onChange={(e) => setCode(e.target.value)}
+                      />
+                      {/* <Editor
                   id="code"
                   value={
                     currentEntry && currentEntry.code ? currentEntry.code : ""
@@ -366,7 +379,7 @@ const NewDocForm: NextPage<Props> = ({ handle }) => {
                   onChange={handleChangeCode}
                   placeholder={"`var someCode = 'Hello, world!'`"}
                 /> */}
-                {/* <CodeEditor
+                      {/* <CodeEditor
                   value={
                     currentEntry && currentEntry.code ? currentEntry.code : ""
                   }
@@ -375,44 +388,47 @@ const NewDocForm: NextPage<Props> = ({ handle }) => {
                   padding={10}
                   style={styles.root as React.CSSProperties}
                 /> */}
-              </div>
-              <p className="mt-2 text-sm text-gray-500">
-                This is a good place to reference large blocks of code, or even
-                an entire file. It'll be automatically formatted upon
-                submission.
-              </p>
-            </div>
-          </div>
-          <div className="px-4 py-3 text-right sm:px-6">
-            <span className="inline-flex rounded-md shadow-sm">
-              <button
-                type="submit"
-                className={`inline-flex justify-center py-2 px-4 border border-transparent 
+                    </div>
+                    <p className="mt-2 text-sm text-gray-500">
+                      This is a good place to reference large blocks of code, or
+                      even an entire file. It'll be automatically formatted upon
+                      submission.
+                    </p>
+                  </div>
+                </div>
+                <div className="px-4 py-3 text-right sm:px-6">
+                  <span className="inline-flex rounded-md shadow-sm">
+                    <button
+                      type="submit"
+                      className={`inline-flex justify-center py-2 px-4 border border-transparent 
                   text-sm leading-5 font-medium rounded-md text-white 
                   bg-blue-600 hover:bg-blue-500 focus:outline-none 
                   focus:border-blue-700 focus:shadow-outline-blue 
                   active:bg-blue-700 transition duration-150 ease-in-out`}
-                onClick={(e) =>
-                  sendEntryData(e, {
-                    entry: {
-                      title,
-                      category,
-                      tagsText: tags,
-                      body: details,
-                      code,
-                      handle,
-                    },
-                  })
-                }
-              >
-                {spinner(isSubmittingForm)}
-                Save
-              </button>
-            </span>
+                      onClick={(e) =>
+                        sendEntryData(e, {
+                          entry: {
+                            title,
+                            category,
+                            tagsText: tags,
+                            body: details,
+                            code,
+                            handle,
+                          },
+                        })
+                      }
+                    >
+                      {spinner(isSubmittingForm)}
+                      Save
+                    </button>
+                  </span>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
-      </form>
-    </Section>
+      </div>
+    </main>
   )
 }
 
