@@ -172,7 +172,7 @@ const DocView: NextPage<Props> = ({ entry }) => {
                   <h2 className="sr-only">Description</h2>
                   <div className="prose max-w-none">
                     <hr className="xl:hidden" />
-                    <Markdown className="markdown-body">
+                    <Markdown className="prose">
                       {entry.body.replace(/\\/g, "")}
                     </Markdown>
                   </div>
