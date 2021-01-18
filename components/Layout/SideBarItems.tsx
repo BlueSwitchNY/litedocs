@@ -6,6 +6,8 @@ import { MagicContext, LoggedInContext, LoadingContext } from "../Store"
 import { NextPage } from "next"
 import Link from "next/link"
 
+import DocSection from "./DocSection"
+
 import {
   viewGridIcon,
   documentsIcon,
@@ -35,13 +37,8 @@ const SideBarItems: NextPage<SideBarItemsProps> = ({ currentUser }) => {
     }
   }, [])
 
-  function toTitleCase(str) {
-    return str.replace(/\w\S*/g, function (txt) {
-      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
-    })
-  }
-
-  //generate unique categories until Prisma allows groupBy
+  //generate unique categories
+  //TODO: swap with /team/[handle]/categories api response
   let teamCategories = {}
   if (currentUser) {
     currentUser.Memberships.forEach((membership: Member) => {
@@ -106,30 +103,10 @@ const SideBarItems: NextPage<SideBarItemsProps> = ({ currentUser }) => {
                   </p>
                   <div className="mt-2 space-y-1">
                     {teamCategories[membership.Team.handle].map((category) => (
-                      <div>
-                        <p
-                          className="flex items-center text-gray-300 px-2 py-1 lg:text-base text-md 
-                        font-medium rounded-md"
-                        >
-                          {toTitleCase(category)}
-                        </p>
-                        {membership.Team.Entries.map((entry: Entry) => {
-                          if (
-                            entry.Category &&
-                            entry.Category.name === category
-                          ) {
-                            return (
-                              <a
-                                href={`/entry/${entry.id}`}
-                                className="ml-4 flex items-center text-gray-300 hover:bg-gray-700 
-                          hover:text-white px-2 py-1 lg:text-sm text-base font-medium rounded-md"
-                              >
-                                <span className="truncate">{entry.title}</span>
-                              </a>
-                            )
-                          }
-                        })}
-                      </div>
+                      <DocSection
+                        category={category}
+                        entries={membership.Team.Entries}
+                      />
                     ))}
                   </div>
                 </div>
