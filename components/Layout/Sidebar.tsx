@@ -53,22 +53,22 @@ const SideBar: NextPage<SideBarProps> = ({ openSidebar, setOpenSidebar }) => {
     //   ? dataUserObject.name.substring(0, 1)
     //   : "?"
 
-    dataUserObject.Memberships.forEach((membership: Member) => {
-      const handle = membership.Team.handle
-      let teamAndTags = {
-        team: handle,
-        tags: [],
-      }
+    // dataUserObject.Memberships.forEach((membership: Member) => {
+    //   const handle = membership.Team.handle
+    //   let teamAndTags = {
+    //     team: handle,
+    //     tags: [],
+    //   }
 
-      fetch(`/api/team/${handle}/tags`)
-        .then((res) => res.json())
-        .then((res) => {
-          teamAndTags.tags = res.tags
-          teamTagsArray.push(teamAndTags)
-          setTeamTags(teamTagsArray)
-          console.log("teamTags:", teamTagsArray)
-        })
-    })
+    //   fetch(`/api/team/${handle}/tags`)
+    //     .then((res) => res.json())
+    //     .then((res) => {
+    //       teamAndTags.tags = res.tags
+    //       teamTagsArray.push(teamAndTags)
+    //       setTeamTags(teamTagsArray)
+    //       console.log("teamTags:", teamTagsArray)
+    //     })
+    // })
   }
 
   React.useEffect(() => {
