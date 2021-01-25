@@ -38,6 +38,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
           User: true,
           Entry: {
             include: {
+              Category: true,
               Team: true,
             },
           },
@@ -58,6 +59,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
               User: true,
               Entry: {
                 include: {
+                  Category: true,
                   Team: true,
                 },
               },

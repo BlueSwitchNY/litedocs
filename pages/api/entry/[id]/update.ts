@@ -100,7 +100,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       if (entryResponse.teamId) {
         await prisma.log.create({
           data: {
-            note: "Updated document",
+            note: "Updated",
             User: {
               connect: {
                 id: user.id,
@@ -126,7 +126,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       } else {
         await prisma.log.create({
           data: {
-            note: "Updated document",
+            note: "Updated",
             User: {
               connect: {
                 id: user.id,
